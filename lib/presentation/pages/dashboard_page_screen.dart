@@ -91,7 +91,9 @@ class _DashboardScreenPageState extends State<DashboardScreenPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, '/kehadiran-page');
+                    },
                     child: const AbsenButton(
                       imageURL: 'assets/icons/kehadiran.png',
                       title: 'Absen Kehadiran Karyawan',
