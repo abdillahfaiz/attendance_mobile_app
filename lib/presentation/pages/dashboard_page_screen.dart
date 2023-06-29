@@ -1,9 +1,16 @@
+import 'package:attendance_mobile_app/bloc/auth/login/login_bloc.dart';
+import 'package:attendance_mobile_app/data/data_resource/auth_datasource.dart';
+import 'package:attendance_mobile_app/data/models/response/user_response_model.dart';
 import 'package:attendance_mobile_app/presentation/utils/absen_button.dart';
 import 'package:attendance_mobile_app/presentation/config/button_box_decoration.dart';
 import 'package:attendance_mobile_app/presentation/config/text_style.dart';
 import 'package:attendance_mobile_app/presentation/utils/izin_button.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import '../../bloc/auth/profile/profile_bloc.dart';
 
 class DashboardScreenPage extends StatefulWidget {
   const DashboardScreenPage({super.key});
@@ -31,7 +38,25 @@ class _DashboardScreenPageState extends State<DashboardScreenPage> {
                       const SizedBox(
                         width: 12.0,
                       ),
-                      const Text('Hello Zaid 👋', style: mainTitle),
+                      BlocProvider(
+                        create: (context) => ProfileBloc(AuthDataSource()),
+                        child: BlocBuilder<ProfileBloc, ProfileState>(
+                          builder: ((context, state) {
+                            if (state is ProfileLoading) {
+                              return const CircularProgressIndicator();
+                            }
+                            if (state is ProfileLoaded) {
+                              return Text(
+                                  'Hello ${state.profileResponseModel.user!.name}👋',
+                                  style: mainTitle);
+                            }
+                            if (state is ProfileError) {
+                              return Text(state.message);
+                            }
+                            return const Text('Error cuy');
+                          }),
+                        ),
+                      ),
                       const SizedBox(
                         width: 12.0,
                       ),

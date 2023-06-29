@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:attendance_mobile_app/presentation/config/color_config.dart';
 
@@ -9,12 +8,14 @@ class FormCustom extends StatelessWidget {
   final IconData formIcon;
   final TextInputType keyboardType;
   final bool obscureText;
+  final TextEditingController textEditincontroller;
   const FormCustom({
     Key? key,
     required this.hintText,
     required this.formIcon,
     required this.keyboardType,
     required this.obscureText,
+    required this.textEditincontroller,
   }) : super(key: key);
 
   @override
@@ -38,6 +39,7 @@ class FormCustom extends StatelessWidget {
         ),
         obscureText: obscureText,
         keyboardType: TextInputType.emailAddress,
+        controller: textEditincontroller,
       ),
     );
   }

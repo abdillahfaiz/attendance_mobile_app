@@ -9,7 +9,7 @@ class IzinButton extends StatelessWidget {
     return Container(
                 // width: MediaQuery.of(context).size.width / 1.13,
                 width: 365,
-                padding: EdgeInsets.symmetric(horizontal: 50),
+                padding: const EdgeInsets.symmetric(horizontal: 50),
                 height: 102,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),

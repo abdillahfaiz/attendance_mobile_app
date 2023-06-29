@@ -34,12 +34,12 @@ class AbsenButton extends StatelessWidget {
           BoxShadow(
             color: shadowColor1,
             blurRadius: 13.58,
-            offset: Offset(0, 8.15),
+            offset: const Offset(0, 8.15),
           ),
           BoxShadow(
             color: shadowColor2,
             blurRadius: 10.86,
-            offset: Offset(0, 5.43),
+            offset: const Offset(0, 5.43),
           ),
         ],
         gradient: LinearGradient(
