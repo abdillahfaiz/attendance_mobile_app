@@ -1,6 +1,5 @@
-import 'package:attendance_mobile_app/bloc/auth/login/login_bloc.dart';
-import 'package:attendance_mobile_app/data/data_resource/auth_datasource.dart';
-import 'package:attendance_mobile_app/data/models/response/user_response_model.dart';
+import 'package:attendance_mobile_app/data/data_resource/Auth/auth_datasource.dart';
+import 'package:attendance_mobile_app/data/local_resource/auth_local_storage.dart';
 import 'package:attendance_mobile_app/presentation/utils/absen_button.dart';
 import 'package:attendance_mobile_app/presentation/config/button_box_decoration.dart';
 import 'package:attendance_mobile_app/presentation/config/text_style.dart';
@@ -8,7 +7,6 @@ import 'package:attendance_mobile_app/presentation/utils/izin_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 import '../../bloc/auth/profile/profile_bloc.dart';
 
@@ -53,7 +51,7 @@ class _DashboardScreenPageState extends State<DashboardScreenPage> {
                             if (state is ProfileError) {
                               return Text(state.message);
                             }
-                            return const Text('Error cuy');
+                            return const Text('Error g tau knpa');
                           }),
                         ),
                       ),

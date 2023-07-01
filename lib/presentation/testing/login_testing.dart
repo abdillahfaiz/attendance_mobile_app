@@ -3,6 +3,8 @@ import 'package:attendance_mobile_app/data/local_resource/auth_local_storage.dar
 import 'package:attendance_mobile_app/data/models/request/login_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class LoginTesting extends StatefulWidget {
   const LoginTesting({super.key});
@@ -12,6 +14,8 @@ class LoginTesting extends StatefulWidget {
 }
 
 class _LoginTestingState extends State<LoginTesting> {
+  bool? isChecked = false;
+  bool passwordChecked = true;
   final emailController = TextEditingController();
   final passController = TextEditingController();
 
@@ -71,25 +75,22 @@ class _LoginTestingState extends State<LoginTesting> {
                 if (state is LoginLoaded) {
                   emailController.clear();
                   passController.clear();
-                  // showTopSnackBar(
-                  //   context as OverlayState,
-                  //   CustomSnackBar.success(
-                  //     message:
-                  //         "Good job, your release is successful. Have a nice day",
-                  //   ),
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                       SnackBar(
-                        backgroundColor: Colors.green,
-                        content: Text(
-                          'Succes Login with token ${state.loginResponseModel.accesToken.toString()}',
-                          style:  TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
+                  showTopSnackBar(
+                    Overlay.of(context),
+                    const CustomSnackBar.success(
+                      message: 'Succes Login. Have a nice day',
+                    ),
                   );
+
                   Navigator.pushReplacementNamed(context, '/dashboard-page');
+                }
+                if (state is LoginError) {
+                  showTopSnackBar(
+                    Overlay.of(context),
+                    CustomSnackBar.error(
+                      message: state.errorMessage,
+                    ),
+                  );
                 }
               })),
             ],

@@ -1,5 +1,5 @@
 import 'package:attendance_mobile_app/bloc/auth/login/login_bloc.dart';
-import 'package:attendance_mobile_app/data/data_resource/auth_datasource.dart';
+import 'package:attendance_mobile_app/data/data_resource/Auth/auth_datasource.dart';
 import 'package:attendance_mobile_app/presentation/pages/dashboard_page_screen.dart';
 import 'package:attendance_mobile_app/presentation/pages/login_page.dart';
 import 'package:attendance_mobile_app/presentation/pages/present_page.dart';
@@ -36,11 +36,10 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Montserrat'),
         initialRoute: '/',
         routes: {
-          // '/': (context) => const LoginPage(),
+          '/': (context) => const LoginPage(),
           '/dashboard-page': (context) => const DashboardScreenPage(),
           '/kehadiran-page': (context) => const PresentPage()
         },
-        home: const LoginPage(),
       ),
     );
   }

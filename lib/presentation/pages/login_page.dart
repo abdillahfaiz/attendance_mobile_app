@@ -5,19 +5,21 @@ import 'package:attendance_mobile_app/presentation/config/text_style.dart';
 import 'package:attendance_mobile_app/presentation/utils/form_login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../../data/local_resource/auth_local_storage.dart';
 import '../../data/models/request/login_model.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool? isChecked = false;
+  bool isChecked = false;
   bool passwordChecked = true;
   final emailController = TextEditingController();
   final passController = TextEditingController();
@@ -25,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   void isLogin() async {
     final isTokenExist = await AuthLocalStorage().isTokenExist();
     if (isTokenExist) {
-      Navigator.pushNamed(context , '/dashboard-page');
+      Navigator.pushNamed(context, '/dashboard-page');
     }
   }
 
@@ -68,11 +70,18 @@ class _LoginPageState extends State<LoginPage> {
                       height: 40.0,
                     ),
                     FormCustom(
-                        textEditincontroller: emailController,
                         hintText: 'Email Address',
                         formIcon: Icons.email,
                         keyboardType: TextInputType.emailAddress,
-                        obscureText: false),
+                        obscureText: false,
+                        textEditincontroller: emailController),
+                    // FormCustom(
+                    //   textEditingController: emailController,
+                    //   hintText: 'Email Address',
+                    //   formIcon: Icons.email,
+                    //   keyboardType: TextInputType.emailAddress,
+                    //   obscureText: false,
+                    // ),
                     const SizedBox(
                       height: 17.0,
                     ),
@@ -87,19 +96,23 @@ class _LoginPageState extends State<LoginPage> {
                       child: TextField(
                         controller: passController,
                         decoration: InputDecoration(
-                            icon: const Icon(
-                              Icons.lock,
-                              color: mainColor,
-                            ),
-                            hintText: 'Password',
-                            border: InputBorder.none,
-                            suffixIcon: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    passwordChecked = !passwordChecked;
-                                  });
-                                },
-                                child: const Icon(Icons.visibility_off))),
+                          icon: const Icon(
+                            Icons.lock,
+                            color: mainColor,
+                          ),
+                          hintText: 'Password',
+                          border: InputBorder.none,
+                          suffixIcon: InkWell(
+                            onTap: () {
+                              setState(() {
+                                passwordChecked = !passwordChecked;
+                              });
+                            },
+                            child: Icon(passwordChecked
+                                ? Icons.visibility_off
+                                : Icons.visibility),
+                          ),
+                        ),
                         obscureText: passwordChecked,
                         keyboardType: TextInputType.emailAddress,
                       ),
@@ -114,15 +127,17 @@ class _LoginPageState extends State<LoginPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Checkbox(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
-                                activeColor: mainColor,
-                                value: isChecked,
-                                onChanged: (newBool) {
-                                  setState(() {
-                                    isChecked = newBool;
-                                  });
-                                }),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              activeColor: mainColor,
+                              value: isChecked,
+                              onChanged: (newBool) {
+                                setState(() {
+                                  isChecked = newBool ?? false;
+                                });
+                              },
+                            ),
                             const Text(
                               'Remember Password',
                               style: regularText,
@@ -146,11 +161,12 @@ class _LoginPageState extends State<LoginPage> {
                         return InkWell(
                           onTap: () {
                             final requestLogin = LoginModel(
-                                email: emailController.text,
-                                password: passController.text);
-                            context
-                                .read<LoginBloc>()
-                                .add(DoLoginEvent(loginModel: requestLogin));
+                              email: emailController.text,
+                              password: passController.text,
+                            );
+                            context.read<LoginBloc>().add(
+                                  DoLoginEvent(loginModel: requestLogin),
+                                );
                           },
                           child: Container(
                             width: MediaQuery.of(context).size.width / 1.20,
@@ -160,40 +176,43 @@ class _LoginPageState extends State<LoginPage> {
                                 .copyWith(
                                     borderRadius: BorderRadius.circular(60)),
                             child: Center(
-                              child: Text('Login',
-                                  style: mainTitle.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.white,
-                                  )),
+                              child: Text(
+                                'Login',
+                                style: mainTitle.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ),
                         );
                       },
-                       listener: (context, state) {
-                        ((context, state) {
-                          if (state is LoginLoaded) {
-                            emailController.clear();
-                            passController.clear();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor: Colors.green,
-                                content: Text(
-                                  'Succes Login with token ${state.loginResponseModel.accesToken.toString()}',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            );
-                            Navigator.pushNamed(
-                                context, '/dashboard-page');
-                          }
-                        });
+                      listener: (context, state) {
+                        if (state is LoginLoaded) {
+                          emailController.clear();
+                          passController.clear();
+                          showTopSnackBar(
+                            Overlay.of(context),
+                            CustomSnackBar.success(
+                              message: 'Login Succes, Have a Nice Day ',
+                            ),
+                          );
+
+                          Navigator.pushNamed(context, '/dashboard-page');
+                        }
+                        if (state is LoginError) {
+                          showTopSnackBar(
+                            Overlay.of(context),
+                            CustomSnackBar.error(
+                              message: state.errorMessage,
+                            ),
+                          );
+                        }
                       },
-                    )
+                    ),
                   ],
                 ),
-                const Text('Created with ❤️ by Faiz')
+                const Text('Created with ❤ by Faiz'),
               ],
             ),
           ),

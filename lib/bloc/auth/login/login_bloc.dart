@@ -2,7 +2,7 @@
 import 'package:attendance_mobile_app/data/models/response/login_response_model.dart';
 import 'package:bloc/bloc.dart';
 
-import 'package:attendance_mobile_app/data/data_resource/auth_datasource.dart';
+import 'package:attendance_mobile_app/data/data_resource/Auth/auth_datasource.dart';
 import 'package:attendance_mobile_app/data/models/request/login_model.dart';
 
 import '../../../data/local_resource/auth_local_storage.dart';
@@ -22,7 +22,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         // await AuthLocalStorage().saveToken(result.accesToken);
         emit(LoginLoaded(loginResponseModel: result));
       } catch (e) {
-        emit(LoginError(errorMessage: 'Network Problem'));
+        emit(LoginError(errorMessage: '$e'));
       }
     });
   }
