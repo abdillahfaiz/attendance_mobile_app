@@ -7,7 +7,7 @@ class ProfileInitial extends ProfileState {}
 
 class ProfileLoading extends ProfileState{}
 class ProfileLoaded extends ProfileState {
-  UserResponseModel profileResponseModel;
+  ProfileResponseModel profileResponseModel;
   ProfileLoaded({
     required this.profileResponseModel,
   });

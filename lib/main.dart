@@ -1,4 +1,6 @@
+import 'package:attendance_mobile_app/bloc/attendance/attendance_in/attendance_in_bloc.dart';
 import 'package:attendance_mobile_app/bloc/auth/login/login_bloc.dart';
+import 'package:attendance_mobile_app/data/data_resource/Attendance/attendance_datasource.dart';
 import 'package:attendance_mobile_app/data/data_resource/Auth/auth_datasource.dart';
 import 'package:attendance_mobile_app/presentation/pages/dashboard_page_screen.dart';
 import 'package:attendance_mobile_app/presentation/pages/login_page.dart';
@@ -25,6 +27,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => ProfileBloc(AuthDataSource()),
+        ),
+        BlocProvider(
+          create: (context) => AttendanceInBloc(AttendanceDataSource()),
         ),
       ],
       child: MaterialApp(

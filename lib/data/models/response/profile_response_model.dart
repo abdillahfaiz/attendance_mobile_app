@@ -1,24 +1,24 @@
 // To parse this JSON data, do
 //
-//     final userResponseModel = userResponseModelFromMap(jsonString);
+//     final profileResponseModel = profileResponseModelFromMap(jsonString);
 
 import 'dart:convert';
 
-class UserResponseModel {
+class ProfileResponseModel {
     User? user;
     String? status;
 
-    UserResponseModel({
-        required this.user,
-        required this.status,
+    ProfileResponseModel({
+        this.user,
+        this.status,
     });
 
-    factory UserResponseModel.fromJson(String str) => UserResponseModel.fromMap(json.decode(str));
+    factory ProfileResponseModel.fromJson(String str) => ProfileResponseModel.fromMap(json.decode(str));
 
     String toJson() => json.encode(toMap());
 
-    factory UserResponseModel.fromMap(Map<String, dynamic> json) => UserResponseModel(
-        user: User.fromMap(json["user"]),
+    factory ProfileResponseModel.fromMap(Map<String, dynamic> json) => ProfileResponseModel(
+        user: json["user"] == null ? null : User.fromMap(json["user"]),
         status: json["status"],
     );
 
@@ -33,22 +33,22 @@ class User {
     String? name;
     String? email;
     dynamic emailVerifiedAt;
-    String? phone;
+    dynamic phone;
     int? positionId;
     int? roleId;
     DateTime? createdAt;
     DateTime? updatedAt;
 
     User({
-         this.id,
-         this.name,
-         this.email,
+        this.id,
+        this.name,
+        this.email,
         this.emailVerifiedAt,
-         this.phone,
-         this.positionId,
-         this.roleId,
-         this.createdAt,
-         this.updatedAt,
+        this.phone,
+        this.positionId,
+        this.roleId,
+        this.createdAt,
+        this.updatedAt,
     });
 
     factory User.fromJson(String str) => User.fromMap(json.decode(str));
@@ -63,8 +63,8 @@ class User {
         phone: json["phone"],
         positionId: json["position_id"],
         roleId: json["role_id"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
     );
 
     Map<String, dynamic> toMap() => {

@@ -2,6 +2,7 @@ import 'package:attendance_mobile_app/bloc/auth/login/login_bloc.dart';
 import 'package:attendance_mobile_app/presentation/config/button_box_decoration.dart';
 import 'package:attendance_mobile_app/presentation/config/color_config.dart';
 import 'package:attendance_mobile_app/presentation/config/text_style.dart';
+import 'package:attendance_mobile_app/presentation/utils/all_text.dart';
 import 'package:attendance_mobile_app/presentation/utils/form_login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   void isLogin() async {
     final isTokenExist = await AuthLocalStorage().isTokenExist();
     if (isTokenExist) {
-      Navigator.pushNamed(context, '/dashboard-page');
+      Navigator.pushReplacementNamed(context, '/dashboard-page');
     }
   }
 
@@ -60,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                 Column(
                   children: [
                     Text(
-                      'LOGIN',
+                      TitleText().login,
                       style: mainTitle.copyWith(
                         fontSize: 30,
                         fontWeight: FontWeight.w800,
@@ -70,18 +71,11 @@ class _LoginPageState extends State<LoginPage> {
                       height: 40.0,
                     ),
                     FormCustom(
-                        hintText: 'Email Address',
+                        hintText: TitleText().hintEmail,
                         formIcon: Icons.email,
                         keyboardType: TextInputType.emailAddress,
                         obscureText: false,
                         textEditincontroller: emailController),
-                    // FormCustom(
-                    //   textEditingController: emailController,
-                    //   hintText: 'Email Address',
-                    //   formIcon: Icons.email,
-                    //   keyboardType: TextInputType.emailAddress,
-                    //   obscureText: false,
-                    // ),
                     const SizedBox(
                       height: 17.0,
                     ),
@@ -100,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                             Icons.lock,
                             color: mainColor,
                           ),
-                          hintText: 'Password',
+                          hintText: TitleText().hintPass,
                           border: InputBorder.none,
                           suffixIcon: InkWell(
                             onTap: () {
@@ -138,14 +132,14 @@ class _LoginPageState extends State<LoginPage> {
                                 });
                               },
                             ),
-                            const Text(
-                              'Remember Password',
+                            Text(
+                              TitleText().rememberPass,
                               style: regularText,
                             ),
                           ],
                         ),
                         Text(
-                          'Forgot your password?',
+                          TitleText().forgotPass,
                           style: regularText.copyWith(color: secondaryColor),
                         ),
                       ],
@@ -177,7 +171,7 @@ class _LoginPageState extends State<LoginPage> {
                                     borderRadius: BorderRadius.circular(60)),
                             child: Center(
                               child: Text(
-                                'Login',
+                                TitleText().login,
                                 style: mainTitle.copyWith(
                                   fontWeight: FontWeight.w700,
                                   color: Colors.white,
@@ -193,8 +187,8 @@ class _LoginPageState extends State<LoginPage> {
                           passController.clear();
                           showTopSnackBar(
                             Overlay.of(context),
-                            CustomSnackBar.success(
-                              message: 'Login Succes, Have a Nice Day ',
+                            const CustomSnackBar.success(
+                              message: 'Login Succes, Have a Nice Day',
                             ),
                           );
 

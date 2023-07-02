@@ -11,13 +11,19 @@ import 'package:flutter/material.dart';
 import '../../bloc/auth/profile/profile_bloc.dart';
 
 class DashboardScreenPage extends StatefulWidget {
-  const DashboardScreenPage({super.key});
+  const DashboardScreenPage({Key? key}) : super(key: key);
 
   @override
   State<DashboardScreenPage> createState() => _DashboardScreenPageState();
 }
 
 class _DashboardScreenPageState extends State<DashboardScreenPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProfileBloc>().add(GetProfileDataEvent());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,24 +42,23 @@ class _DashboardScreenPageState extends State<DashboardScreenPage> {
                       const SizedBox(
                         width: 12.0,
                       ),
-                      BlocProvider(
-                        create: (context) => ProfileBloc(AuthDataSource()),
-                        child: BlocBuilder<ProfileBloc, ProfileState>(
-                          builder: ((context, state) {
-                            if (state is ProfileLoading) {
-                              return const CircularProgressIndicator();
-                            }
-                            if (state is ProfileLoaded) {
-                              return Text(
-                                  'Hello ${state.profileResponseModel.user!.name}👋',
-                                  style: mainTitle);
-                            }
-                            if (state is ProfileError) {
-                              return Text(state.message);
-                            }
-                            return const Text('Error g tau knpa');
-                          }),
-                        ),
+                      BlocBuilder<ProfileBloc, ProfileState>(
+                        builder: (context, state) {
+                          if (state is ProfileLoading) {
+                            return const CircularProgressIndicator();
+                          }
+                          if (state is ProfileLoaded) {
+                            // String text = 'Hello ${state.profileResponseModel.user!.name}👋';
+                            return Text(
+                               state.profileResponseModel.user!.name ?? '-',
+                              style: mainTitle,
+                            );
+                          }
+                          if (state is ProfileError) {
+                            return Text(state.message);
+                          }
+                          return const Text('No Data');
+                        },
                       ),
                       const SizedBox(
                         width: 12.0,
@@ -80,7 +85,9 @@ class _DashboardScreenPageState extends State<DashboardScreenPage> {
                     height: 48,
                     width: MediaQuery.of(context).size.width / 1.37,
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 21, vertical: 14),
+                      horizontal: 21,
+                      vertical: 14,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
