@@ -52,6 +52,11 @@ class AttendanceInResponseModel {
   factory AttendanceInResponseModel.fromJson(String source) =>
       AttendanceInResponseModel.fromMap(
           json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'AttendanceInResponseModel(success: $success, name: $name, role: $role, presence_date: $presence_date, latitude: $latitude, longitude: $longitude, location: $location, message: $message)';
+  }
 }
 
 // {

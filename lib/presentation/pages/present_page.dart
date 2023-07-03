@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:attendance_mobile_app/data/data_resource/Attendance/attendance_datasource.dart';
 import 'package:attendance_mobile_app/data/models/request/attendance_in_model.dart';
 import 'package:attendance_mobile_app/data/repository/location_repository.dart';
 import 'package:attendance_mobile_app/presentation/config/button_box_decoration.dart';
@@ -12,8 +15,11 @@ import 'package:latlong2/latlong.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:http/http.dart' as http;
 
 import '../../bloc/attendance/attendance_in/attendance_in_bloc.dart';
+import '../../data/local_resource/auth_local_storage.dart';
+import '../../data/models/response/attendance_in_response_model.dart';
 
 class PresentPage extends StatefulWidget {
   const PresentPage({super.key});
@@ -27,10 +33,31 @@ class _PresentPageState extends State<PresentPage> {
   double lat = 0;
   double long = 0;
   String timePresence = '';
+  late Future<AttendanceInResponseModel> _preserrence;
+
+  Future<AttendanceInResponseModel> attendanceIn(
+    double lat,
+    double lang,
+  ) async {
+    final String token = await AuthLocalStorage().getToken();
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+    final response = await http.post(
+      Uri.parse('http://absensi.zcbyr.tech/api/absensi/1/hadir'),
+      headers: headers,
+      body: jsonEncode(<String, dynamic>{'latitude': lat, 'longitude': long}),
+    );
+    final result = AttendanceInResponseModel.fromJson(
+        jsonDecode(response.body.toString()));
+    return result;
+  }
 
   @override
   void initState() {
     _getLocation;
+    _preserrence;
     super.initState();
   }
 
@@ -65,109 +92,218 @@ class _PresentPageState extends State<PresentPage> {
                   const SizedBox(
                     height: 23.0,
                   ),
-                  BlocBuilder<AttendanceInBloc, AttendanceInState>(
-                      builder: ((context, state) {
-                    if (state is AttendanceInLoaded) {
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          DataAttendance(
-                              title: 'Hari : ',
-                              value:
-                                  DateFormat('EEEEE').format(DateTime.now())),
-                          const SizedBox(
-                            height: 3.0,
-                          ),
-                          DataAttendance(
-                              title: 'Tanggal : ',
-                              value: DateFormat('dd-MM-yyyy')
-                                  .format(DateTime.now())),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.6,
-                            child: const Divider(
-                              color: mainColor,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          DataAttendance(
-                              title: 'Nama : ',
-                              value: state.attendanceInResponseModel.name ??
-                                  'null'),
-                          const SizedBox(
-                            height: 3.0,
-                          ),
-                          DataAttendance(
-                              title: 'Role : ',
-                              value:
-                                  state.attendanceInResponseModel.role ?? ''),
-                          const SizedBox(
-                            height: 3.0,
-                          ),
-                          DataAttendance(
-                              title: 'Jam Hadir : ', value: timePresence),
-                          const SizedBox(
-                            height: 3.0,
-                          ),
-                          DataAttendance(
-                              title: 'Latitude : ', value: lat.toString()),
-                          const SizedBox(
-                            height: 3.0,
-                          ),
-                          DataAttendance(
-                              title: 'Longitude : ', value: long.toString()),
-                        ],
-                      );
-                    }
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        DataAttendance(
-                            title: 'Hari : ',
-                            value: DateFormat('EEEEE').format(DateTime.now())),
-                        const SizedBox(
-                          height: 3.0,
-                        ),
-                        DataAttendance(
-                            title: 'Tanggal : ',
-                            value: DateFormat('dd-MM-yyyy')
-                                .format(DateTime.now())),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width / 1.6,
-                          child: const Divider(
-                            color: mainColor,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        const DataAttendance(title: 'Nama : ', value: ''),
-                        const SizedBox(
-                          height: 3.0,
-                        ),
-                        const DataAttendance(title: 'Role : ', value: ''),
-                        const SizedBox(
-                          height: 3.0,
-                        ),
-                        const DataAttendance(title: 'Jam Hadir : ', value: ''),
-                        const SizedBox(
-                          height: 3.0,
-                        ),
-                        const DataAttendance(title: 'Latitude : ', value: ''),
-                        const SizedBox(
-                          height: 3.0,
-                        ),
-                        const DataAttendance(title: 'Longitude : ', value: ''),
-                      ],
-                    );
-                  })),
+                  // FutureBuilder<AttendanceInResponseModel>(
+                  //   future: _preserrence,
+                  //   builder: ((context, snapshot) {
+                  //     if (snapshot.hasData) {
+                  //       return Column(
+                  //         crossAxisAlignment: CrossAxisAlignment.start,
+                  //         children: [
+                  //           DataAttendance(
+                  //               title: 'Hari : ',
+                  //               value:
+                  //                   DateFormat('EEEEE').format(DateTime.now())),
+                  //           const SizedBox(
+                  //             height: 3.0,
+                  //           ),
+                  //           DataAttendance(
+                  //               title: 'Tanggal : ',
+                  //               value: DateFormat('dd-MM-yyyy')
+                  //                   .format(DateTime.now())),
+                  //           const SizedBox(
+                  //             height: 10.0,
+                  //           ),
+                  //           SizedBox(
+                  //             width: MediaQuery.of(context).size.width / 1.6,
+                  //             child: const Divider(
+                  //               color: mainColor,
+                  //             ),
+                  //           ),
+                  //           const SizedBox(
+                  //             height: 10.0,
+                  //           ),
+                  //           DataAttendance(
+                  //               title: 'Nama : ',
+                  //               value: snapshot.data!.name ?? 'null'),
+                  //           const SizedBox(
+                  //             height: 3.0,
+                  //           ),
+                  //           DataAttendance(
+                  //               title: 'Role : ',
+                  //               value: snapshot.data!.role ?? 'null'),
+                  //           const SizedBox(
+                  //             height: 3.0,
+                  //           ),
+                  //           DataAttendance(
+                  //               title: 'Jam Hadir : ', value: timePresence),
+                  //           const SizedBox(
+                  //             height: 3.0,
+                  //           ),
+                  //           DataAttendance(
+                  //               title: 'Latitude : ', value: lat.toString()),
+                  //           const SizedBox(
+                  //             height: 3.0,
+                  //           ),
+                  //           DataAttendance(
+                  //               title: 'Longitude : ', value: long.toString()),
+                  //         ],
+                  //       );
+                  //     }
+                  //     return Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         DataAttendance(
+                  //             title: 'Hari : ',
+                  //             value:
+                  //                 DateFormat('EEEEE').format(DateTime.now())),
+                  //         const SizedBox(
+                  //           height: 3.0,
+                  //         ),
+                  //         DataAttendance(
+                  //             title: 'Tanggal : ',
+                  //             value: DateFormat('dd-MM-yyyy')
+                  //                 .format(DateTime.now())),
+                  //         const SizedBox(
+                  //           height: 10.0,
+                  //         ),
+                  //         SizedBox(
+                  //           width: MediaQuery.of(context).size.width / 1.6,
+                  //           child: const Divider(
+                  //             color: mainColor,
+                  //           ),
+                  //         ),
+                  //         const SizedBox(
+                  //           height: 10.0,
+                  //         ),
+                  //         const DataAttendance(title: 'Nama : ', value: ''),
+                  //         const SizedBox(
+                  //           height: 3.0,
+                  //         ),
+                  //         const DataAttendance(title: 'Role : ', value: ''),
+                  //         const SizedBox(
+                  //           height: 3.0,
+                  //         ),
+                  //         DataAttendance(
+                  //             title: 'Jam Hadir : ', value: timePresence),
+                  //         const SizedBox(
+                  //           height: 3.0,
+                  //         ),
+                  //         DataAttendance(
+                  //             title: 'Latitude : ', value: lat.toString()),
+                  //         const SizedBox(
+                  //           height: 3.0,
+                  //         ),
+                  //         DataAttendance(
+                  //             title: 'Longitude : ', value: long.toString()),
+                  //       ],
+                  //     );
+                  //   }),
+
+                  //   // BlocBuilder<AttendanceInBloc, AttendanceInState>(
+                  //   //     builder: ((context, state) {
+                  //   //   if (state is AttendanceInLoaded) {
+                  //   //     print(state.attendanceInResponseModel.latitude);
+                  //   //     Column(
+                  //   //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //   //       children: [
+                  //   //         DataAttendance(
+                  //   //             title: 'Hari : ',
+                  //   //             value:
+                  //   //                 DateFormat('EEEEE').format(DateTime.now())),
+                  //   //         const SizedBox(
+                  //   //           height: 3.0,
+                  //   //         ),
+                  //   //         DataAttendance(
+                  //   //             title: 'Tanggal : ',
+                  //   //             value: DateFormat('dd-MM-yyyy')
+                  //   //                 .format(DateTime.now())),
+                  //   //         const SizedBox(
+                  //   //           height: 10.0,
+                  //   //         ),
+                  //   //         SizedBox(
+                  //   //           width: MediaQuery.of(context).size.width / 1.6,
+                  //   //           child: const Divider(
+                  //   //             color: mainColor,
+                  //   //           ),
+                  //   //         ),
+                  //   //         const SizedBox(
+                  //   //           height: 10.0,
+                  //   //         ),
+                  //   //         DataAttendance(
+                  //   //             title: 'Nama : ',
+                  //   //             value:
+                  //   //                 state.attendanceInResponseModel.name ?? ''),
+                  //   //         const SizedBox(
+                  //   //           height: 3.0,
+                  //   //         ),
+                  //   //         DataAttendance(
+                  //   //             title: 'Role : ',
+                  //   //             value:
+                  //   //                 state.attendanceInResponseModel.role ?? ''),
+                  //   //         const SizedBox(
+                  //   //           height: 3.0,
+                  //   //         ),
+                  //   //         DataAttendance(
+                  //   //             title: 'Jam Hadir : ', value: timePresence),
+                  //   //         const SizedBox(
+                  //   //           height: 3.0,
+                  //   //         ),
+                  //   //         DataAttendance(
+                  //   //             title: 'Latitude : ', value: lat.toString()),
+                  //   //         const SizedBox(
+                  //   //           height: 3.0,
+                  //   //         ),
+                  //   //         DataAttendance(
+                  //   //             title: 'Longitude : ', value: long.toString()),
+                  //   //       ],
+                  //   //     );
+                  //   //   }
+                  //   //   return Column(
+                  //   //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //   //     children: [
+                  //   //       DataAttendance(
+                  //   //           title: 'Hari : ',
+                  //   //           value: DateFormat('EEEEE').format(DateTime.now())),
+                  //   //       const SizedBox(
+                  //   //         height: 3.0,
+                  //   //       ),
+                  //   //       DataAttendance(
+                  //   //           title: 'Tanggal : ',
+                  //   //           value: DateFormat('dd-MM-yyyy')
+                  //   //               .format(DateTime.now())),
+                  //   //       const SizedBox(
+                  //   //         height: 10.0,
+                  //   //       ),
+                  //   //       SizedBox(
+                  //   //         width: MediaQuery.of(context).size.width / 1.6,
+                  //   //         child: const Divider(
+                  //   //           color: mainColor,
+                  //   //         ),
+                  //   //       ),
+                  //   //       const SizedBox(
+                  //   //         height: 10.0,
+                  //   //       ),
+                  //   //       const DataAttendance(title: 'Nama : ', value: ''),
+                  //   //       const SizedBox(
+                  //   //         height: 3.0,
+                  //   //       ),
+                  //   //       const DataAttendance(title: 'Role : ', value: ''),
+                  //   //       const SizedBox(
+                  //   //         height: 3.0,
+                  //   //       ),
+                  //   //       const DataAttendance(title: 'Jam Hadir : ', value: ''),
+                  //   //       const SizedBox(
+                  //   //         height: 3.0,
+                  //   //       ),
+                  //   //       const DataAttendance(title: 'Latitude : ', value: ''),
+                  //   //       const SizedBox(
+                  //   //         height: 3.0,
+                  //   //       ),
+                  //   //       const DataAttendance(title: 'Longitude : ', value: ''),
+                  //   //     ],
+                  //   //   );
+                  //   // })),
+                  // )
                 ],
               ),
             ),
@@ -220,63 +356,93 @@ class _PresentPageState extends State<PresentPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                BlocConsumer<AttendanceInBloc, AttendanceInState>(
-                  listener: (context, state) {
-                    if (state is AttendanceInLoaded) {
-                      showTopSnackBar(
-                        Overlay.of(context),
-                        CustomSnackBar.success(
-                          message: '${state.attendanceInResponseModel.message}',
-                        ),
-                      );
-                    }
-                    if (state is AttendanceInError) {
-                      showTopSnackBar(
-                        Overlay.of(context),
-                        CustomSnackBar.success(
-                          message: state.messageError,
-                        ),
-                      );
-                    }
+                InkWell(
+                  onTap: () async {
+                    Position position = await _getLocation;
+                    String timeAttendance =
+                        DateFormat("HH:mm:ss").format(DateTime.now());
+                    setState(() {
+                      lat = position.latitude;
+                      long = position.longitude;
+                      timePresence = timeAttendance;
+                      _preserrence = attendanceIn(lat, long);
+                    });
+                    // final resultRequest = AttendanceInModel(
+                    //     latitude: lat,
+                    //     longitude: long,
+                    //     presenceEnterTime: timePresence);
                   },
-                  builder: (context, state) {
-                    if (state is AtttendanceInLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    return InkWell(
-                      onTap: () async {
-                        Position position = await _getLocation;
-                        String timeAttendance =
-                            DateFormat("HH:mm:ss").format(DateTime.now());
-                        setState(() {
-                          lat = position.latitude;
-                          long = position.longitude;
-                          timePresence = timeAttendance;
-                        });
-                        final resultRequest = AttendanceInModel(
-                            latitude: lat,
-                            longitude: long,
-                            presenceEnterTime: timePresence);
-                        context.read<AttendanceInBloc>().add(
-                            DoAttendanceIn(attendanceInModel: resultRequest));
-                      },
-                      child: Container(
-                        width: 230,
-                        height: 77,
-                        decoration: BoxDecorationCustom().buttonBlue,
-                        child: Center(
-                          child: Text(
-                            'Hadir',
-                            style: mainTitle.copyWith(
-                                color: Colors.white, fontSize: 26),
-                          ),
-                        ),
+                  child: Container(
+                    width: 230,
+                    height: 77,
+                    decoration: BoxDecorationCustom().buttonBlue,
+                    child: Center(
+                      child: Text(
+                        'Hadir',
+                        style: mainTitle.copyWith(
+                            color: Colors.white, fontSize: 26),
                       ),
-                    );
-                  },
+                    ),
+                  ),
                 ),
+                // BlocConsumer<AttendanceInBloc, AttendanceInState>(
+                //   listener: (context, state) {
+                //     if (state is AttendanceInLoaded) {
+                //       showTopSnackBar(
+                //         Overlay.of(context),
+                //         CustomSnackBar.success(
+                //           message: '${state.attendanceInResponseModel.message}',
+                //         ),
+                //       );
+                //     }
+                //     if (state is AttendanceInError) {
+                //       print(state.messageError);
+                //       showTopSnackBar(
+                //         Overlay.of(context),
+                //         CustomSnackBar.error(
+                //           message: state.messageError,
+                //         ),
+                //       );
+                //     }
+                //   },
+                //   builder: (context, state) {
+                //     if (state is AtttendanceInLoading) {
+                //       return const Center(
+                //         child: CircularProgressIndicator(),
+                //       );
+                //     }
+                //     return InkWell(
+                //       onTap: () async {
+                //         Position position = await _getLocation;
+                //         String timeAttendance =
+                //             DateFormat("HH:mm:ss").format(DateTime.now());
+                //         setState(() {
+                //           lat = position.latitude;
+                //           long = position.longitude;
+                //           timePresence = timeAttendance;
+                //         });
+                //         final resultRequest = AttendanceInModel(
+                //             latitude: lat,
+                //             longitude: long,
+                //             presenceEnterTime: timePresence);
+                //         context.read<AttendanceInBloc>().add(
+                //             DoAttendanceIn(attendanceInModel: resultRequest));
+                //       },
+                //       child: Container(
+                //         width: 230,
+                //         height: 77,
+                //         decoration: BoxDecorationCustom().buttonBlue,
+                //         child: Center(
+                //           child: Text(
+                //             'Hadir',
+                //             style: mainTitle.copyWith(
+                //                 color: Colors.white, fontSize: 26),
+                //           ),
+                //         ),
+                //       ),
+                //     );
+                //   },
+                // ),
                 StreamBuilder(
                     stream: Stream.periodic(const Duration(seconds: 1)),
                     builder: (context, snapshot) {

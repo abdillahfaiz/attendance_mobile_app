@@ -19,7 +19,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       try {
         emit(LoginLoading());
         final result = await authDataSource.doLogin(event.loginModel);
-        // await AuthLocalStorage().saveToken(result.accesToken);
+        await AuthLocalStorage().saveToken(result.token!);
         emit(LoginLoaded(loginResponseModel: result));
       } catch (e) {
         emit(LoginError(errorMessage: '$e'));

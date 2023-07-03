@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:attendance_mobile_app/data/data_resource/Auth/auth_datasource.dart';
 import 'package:attendance_mobile_app/data/local_resource/auth_local_storage.dart';
 import 'package:attendance_mobile_app/presentation/utils/absen_button.dart';
@@ -7,8 +9,10 @@ import 'package:attendance_mobile_app/presentation/utils/izin_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import '../../bloc/auth/profile/profile_bloc.dart';
+import '../../data/models/response/profile_response_model.dart';
 
 class DashboardScreenPage extends StatefulWidget {
   const DashboardScreenPage({Key? key}) : super(key: key);
@@ -18,10 +22,30 @@ class DashboardScreenPage extends StatefulWidget {
 }
 
 class _DashboardScreenPageState extends State<DashboardScreenPage> {
+  Future<String>? token;
+
+  Future<String> getToken() async {
+    AuthLocalStorage authLocalStorage = AuthLocalStorage();
+    String token = await authLocalStorage.getToken();
+    // print(token);
+    return token;
+  }
+
+  Future<ProfileResponseModel> getUserProfile() async {
+    final token = await AuthLocalStorage().getToken();
+    print(token);
+    var header = {'Authorization': 'Bearer $token'};
+    final response = await http.get(
+        Uri.parse('http://absensi.zcbyr.tech/api/user-detail'),
+        headers: header);
+    final result = ProfileResponseModel.fromJson((response.body));
+    return result;
+  }
+
   @override
   void initState() {
     super.initState();
-    context.read<ProfileBloc>().add(GetProfileDataEvent());
+    token = getToken();
   }
 
   @override
@@ -42,24 +66,38 @@ class _DashboardScreenPageState extends State<DashboardScreenPage> {
                       const SizedBox(
                         width: 12.0,
                       ),
-                      BlocBuilder<ProfileBloc, ProfileState>(
-                        builder: (context, state) {
-                          if (state is ProfileLoading) {
-                            return const CircularProgressIndicator();
-                          }
-                          if (state is ProfileLoaded) {
-                            // String text = 'Hello ${state.profileResponseModel.user!.name}👋';
+                      FutureBuilder<ProfileResponseModel>(
+                        future: getUserProfile(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
                             return Text(
-                               state.profileResponseModel.user!.name ?? '-',
-                              style: mainTitle,
+                              'Hello ${snapshot.data!.name} 👋',
+                              style: mainTitle.copyWith(fontSize: 20),
                             );
+                          } else if (snapshot.hasError) {
+                            return Text('${snapshot.error}');
                           }
-                          if (state is ProfileError) {
-                            return Text(state.message);
-                          }
-                          return const Text('No Data');
+                          return const CircularProgressIndicator();
                         },
                       ),
+                      // BlocBuilder<ProfileBloc, ProfileState>(
+                      //   builder: (context, state) {
+                      //     if (state is ProfileLoading) {
+                      //       return const CircularProgressIndicator();
+                      //     }
+                      //     if (state is ProfileLoaded) {
+                      //       // String text = 'Hello ${state.profileResponseModel.user!.name}👋';
+                      //       return Text(
+                      //         'Hello ${state.profileResponseModel.name} 👋',
+                      //         style: mainTitle.copyWith(fontSize: 24),
+                      //       );
+                      //     }
+                      //     if (state is ProfileError) {
+                      //       return Text(state.message);
+                      //     }
+                      //     return const Text('No Data');
+                      //   },
+                      // ),
                       const SizedBox(
                         width: 12.0,
                       ),
@@ -72,7 +110,7 @@ class _DashboardScreenPageState extends State<DashboardScreenPage> {
                 height: 32.0,
               ),
               Text(
-                'Selamat datang di Aplikasi Absensi ',
+                'Selamat Datang di Aplikasi Absensi',
                 style: mainTitle.copyWith(fontSize: 24),
               ),
               const SizedBox(

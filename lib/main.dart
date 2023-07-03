@@ -6,9 +6,9 @@ import 'package:attendance_mobile_app/presentation/pages/dashboard_page_screen.d
 import 'package:attendance_mobile_app/presentation/pages/login_page.dart';
 import 'package:attendance_mobile_app/presentation/pages/present_page.dart';
 import 'package:attendance_mobile_app/presentation/testing/login_testing.dart';
+import 'package:attendance_mobile_app/presentation/testing/test_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'bloc/auth/profile/profile_bloc.dart';
 
 void main() {

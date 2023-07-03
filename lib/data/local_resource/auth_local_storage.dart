@@ -5,13 +5,13 @@ class AuthLocalStorage {
 
   Future<String> saveToken (String token)async {
     final pref = await SharedPreferences.getInstance();
-    await pref.setString(tokenKey, token);
+    await pref.setString('token', token);
     return token;
   }
 
   Future<String> getToken () async {
     final pref = await SharedPreferences.getInstance();
-    return pref.getString(tokenKey)!;
+    return pref.getString('token')!;
   }
 
   Future<bool> isTokenExist () async {

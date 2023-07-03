@@ -77,8 +77,8 @@ class _LoginTestingState extends State<LoginTesting> {
                   passController.clear();
                   showTopSnackBar(
                     Overlay.of(context),
-                    const CustomSnackBar.success(
-                      message: 'Succes Login. Have a nice day',
+                    CustomSnackBar.success(
+                      message: 'Succes Login. Have a nice day ${state.loginResponseModel.token}',
                     ),
                   );
 

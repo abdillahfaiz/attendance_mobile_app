@@ -2,6 +2,7 @@ import 'package:attendance_mobile_app/bloc/auth/login/login_bloc.dart';
 import 'package:attendance_mobile_app/presentation/config/button_box_decoration.dart';
 import 'package:attendance_mobile_app/presentation/config/color_config.dart';
 import 'package:attendance_mobile_app/presentation/config/text_style.dart';
+import 'package:attendance_mobile_app/presentation/testing/test_profile.dart';
 import 'package:attendance_mobile_app/presentation/utils/all_text.dart';
 import 'package:attendance_mobile_app/presentation/utils/form_login.dart';
 import 'package:flutter/material.dart';
@@ -187,8 +188,9 @@ class _LoginPageState extends State<LoginPage> {
                           passController.clear();
                           showTopSnackBar(
                             Overlay.of(context),
-                            const CustomSnackBar.success(
-                              message: 'Login Succes, Have a Nice Day',
+                            CustomSnackBar.success(
+                              message:
+                                  'Login Succes, Have a Nice Day ${state.loginResponseModel.token}',
                             ),
                           );
 
