@@ -1,12 +1,14 @@
-import 'package:attendance_mobile_app/bloc/attendance/attendance_in/attendance_in_bloc.dart';
 import 'package:attendance_mobile_app/bloc/auth/login/login_bloc.dart';
-import 'package:attendance_mobile_app/data/data_resource/Attendance/attendance_datasource.dart';
 import 'package:attendance_mobile_app/data/data_resource/Auth/auth_datasource.dart';
+import 'package:attendance_mobile_app/presentation/pages/att_out_page.dart';
+import 'package:attendance_mobile_app/presentation/pages/att_permission_page.dart';
 import 'package:attendance_mobile_app/presentation/pages/dashboard_page_screen.dart';
+import 'package:attendance_mobile_app/presentation/pages/in_attendance.dart';
 import 'package:attendance_mobile_app/presentation/pages/login_page.dart';
-import 'package:attendance_mobile_app/presentation/pages/present_page.dart';
-import 'package:attendance_mobile_app/presentation/testing/login_testing.dart';
-import 'package:attendance_mobile_app/presentation/testing/test_profile.dart';
+import 'package:attendance_mobile_app/presentation/pages/att_in.dart';
+import 'package:attendance_mobile_app/presentation/pages/out_attendance.dart';
+import 'package:attendance_mobile_app/presentation/pages/profile_page.dart';
+import 'package:attendance_mobile_app/routing/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/auth/profile/profile_bloc.dart';
@@ -28,9 +30,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => ProfileBloc(AuthDataSource()),
         ),
-        BlocProvider(
-          create: (context) => AttendanceInBloc(AttendanceDataSource()),
-        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -43,7 +42,10 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => const LoginPage(),
           '/dashboard-page': (context) => const DashboardScreenPage(),
-          '/kehadiran-page': (context) => const PresentPage()
+          '/kehadiran-page': (context) => const AttendanceInPage(),
+          '/absen-pulang-page': (context) => const AttendanceOutPage(),
+          '/izin-page': (context) => const AttendancePermissionPage(),
+          '/profile-page': (context) => const ProfilePage()
         },
       ),
     );

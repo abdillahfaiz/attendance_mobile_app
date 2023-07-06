@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:attendance_mobile_app/data/models/response/login_response_model.dart';
+import 'package:attendance_mobile_app/data/models/response/auth/login_response_model.dart';
 import 'package:bloc/bloc.dart';
 
 import 'package:attendance_mobile_app/data/data_resource/Auth/auth_datasource.dart';

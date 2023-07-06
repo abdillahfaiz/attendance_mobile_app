@@ -9,13 +9,15 @@ class FormCustom extends StatelessWidget {
   final TextInputType keyboardType;
   final bool obscureText;
   final TextEditingController textEditincontroller;
-  const FormCustom({
+  int maxLine;
+   FormCustom({
     Key? key,
     required this.hintText,
     required this.formIcon,
     required this.keyboardType,
     required this.obscureText,
     required this.textEditincontroller,
+    required this.maxLine,
   }) : super(key: key);
 
   @override
@@ -29,6 +31,7 @@ class FormCustom extends StatelessWidget {
         border: Border.all(width: 1, color: mainColor),
       ),
       child:  TextField(
+        maxLines: maxLine,
         decoration: InputDecoration(
           icon: Icon(
             formIcon,

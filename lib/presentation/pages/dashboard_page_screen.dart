@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../../bloc/auth/profile/profile_bloc.dart';
-import '../../data/models/response/profile_response_model.dart';
+import '../../data/models/response/auth/profile_response_model.dart';
 
 class DashboardScreenPage extends StatefulWidget {
   const DashboardScreenPage({Key? key}) : super(key: key);
@@ -33,12 +33,11 @@ class _DashboardScreenPageState extends State<DashboardScreenPage> {
 
   Future<ProfileResponseModel> getUserProfile() async {
     final token = await AuthLocalStorage().getToken();
-    print(token);
     var header = {'Authorization': 'Bearer $token'};
     final response = await http.get(
         Uri.parse('http://absensi.zcbyr.tech/api/user-detail'),
         headers: header);
-    final result = ProfileResponseModel.fromJson((response.body));
+    final result = ProfileResponseModel.fromJson(response.body);
     return result;
   }
 
@@ -46,6 +45,7 @@ class _DashboardScreenPageState extends State<DashboardScreenPage> {
   void initState() {
     super.initState();
     token = getToken();
+    getUserProfile();
   }
 
   @override
@@ -69,41 +69,35 @@ class _DashboardScreenPageState extends State<DashboardScreenPage> {
                       FutureBuilder<ProfileResponseModel>(
                         future: getUserProfile(),
                         builder: (context, snapshot) {
-                          if (snapshot.hasData) {
+                          if (!snapshot.hasData) {
+                            return const Text('null');
+                          } else if (snapshot.hasError) {
+                            return Text('${snapshot.error}');
+                          } else if (snapshot.hasData) {
                             return Text(
                               'Hello ${snapshot.data!.name} 👋',
                               style: mainTitle.copyWith(fontSize: 20),
                             );
-                          } else if (snapshot.hasError) {
-                            return Text('${snapshot.error}');
                           }
-                          return const CircularProgressIndicator();
+                          return Container();
                         },
                       ),
-                      // BlocBuilder<ProfileBloc, ProfileState>(
-                      //   builder: (context, state) {
-                      //     if (state is ProfileLoading) {
-                      //       return const CircularProgressIndicator();
-                      //     }
-                      //     if (state is ProfileLoaded) {
-                      //       // String text = 'Hello ${state.profileResponseModel.user!.name}👋';
-                      //       return Text(
-                      //         'Hello ${state.profileResponseModel.name} 👋',
-                      //         style: mainTitle.copyWith(fontSize: 24),
-                      //       );
-                      //     }
-                      //     if (state is ProfileError) {
-                      //       return Text(state.message);
-                      //     }
-                      //     return const Text('No Data');
-                      //   },
-                      // ),
                       const SizedBox(
                         width: 12.0,
                       ),
                     ],
                   ),
-                  Image.asset('assets/icons/avatar_icon.png'),
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/profile-page');
+                      },
+                      child: SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: Image.asset(
+                            'assets/icons/avatar_icon.png',
+                            fit: BoxFit.contain,
+                          ))),
                 ],
               ),
               const SizedBox(
@@ -173,7 +167,9 @@ class _DashboardScreenPageState extends State<DashboardScreenPage> {
                     ),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, '/absen-pulang-page');
+                    },
                     child: const AbsenButton(
                       imageURL: 'assets/icons/pulang.png',
                       title: "Absensi Pulang Karyawan",
@@ -190,7 +186,9 @@ class _DashboardScreenPageState extends State<DashboardScreenPage> {
                 height: 24.0,
               ),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, '/izin-page');
+                },
                 child: const IzinButton(),
               ),
             ],

@@ -72,6 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 40.0,
                     ),
                     FormCustom(
+                      maxLine: 1,
                         hintText: TitleText().hintEmail,
                         formIcon: Icons.email,
                         keyboardType: TextInputType.emailAddress,

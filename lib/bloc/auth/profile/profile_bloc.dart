@@ -5,7 +5,7 @@ import 'package:bloc/bloc.dart';
 
 import 'package:attendance_mobile_app/data/data_resource/Auth/auth_datasource.dart';
 
-import '../../../data/models/response/profile_response_model.dart';
+import '../../../data/models/response/auth/profile_response_model.dart';
 
 part 'profile_event.dart';
 part 'profile_state.dart';

@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:attendance_mobile_app/data/local_resource/auth_local_storage.dart';
 import 'package:attendance_mobile_app/data/models/request/login_model.dart';
-import 'package:attendance_mobile_app/data/models/response/login_response_model.dart';
+import 'package:attendance_mobile_app/data/models/response/auth/login_response_model.dart';
 import 'package:http/http.dart' as http;
 
-import '../../models/response/profile_response_model.dart';
+import '../../models/response/auth/profile_response_model.dart';
 
 class AuthDataSource {
   Future<LoginResponseModel> doLogin(LoginModel loginModel) async {

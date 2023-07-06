@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // To parse this JSON data, do
 //
 //     final profileResponseModel = profileResponseModelFromMap(jsonString);
@@ -38,4 +39,9 @@ class ProfileResponseModel {
         "position": position,
         "role": role,
     };
+
+  @override
+  String toString() {
+    return 'ProfileResponseModel(id: $id, name: $name, email: $email, position: $position, role: $role)';
+  }
 }
