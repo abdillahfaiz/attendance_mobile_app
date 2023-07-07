@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:attendance_mobile_app/presentation/config/color_config.dart';
 
+// ignore: must_be_immutable
 class FormCustom extends StatelessWidget {
   final String hintText;
   final IconData formIcon;

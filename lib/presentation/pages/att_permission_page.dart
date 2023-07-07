@@ -1,13 +1,14 @@
 import 'dart:convert';
 
-import 'package:attendance_mobile_app/data/data_resource/Attendance/attendance_datasource.dart';
 import 'package:attendance_mobile_app/presentation/utils/form_login.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../../data/local_resource/auth_local_storage.dart';
-import '../../data/models/request/attendance/attendance_permission_model.dart';
+import '../../data/models/request/attendance/attendance_in_model.dart';
 import '../config/button_box_decoration.dart';
 import '../config/color_config.dart';
 import '../config/text_style.dart';
@@ -38,8 +39,39 @@ class _AttendancePermissionState extends State<AttendancePermissionPage> {
           Uri.parse('http://absensi.zcbyr.tech/api/absensi/1/minta-izin'),
           headers: headers,
           body: {'title': title, 'description': desc});
+      final data = jsonEncode(response.body);
+      AttResponseModel result = AttResponseModel.fromJson(jsonDecode(data));
+      if (result.success!) {
+        showTopSnackBar(
+          // ignore: use_build_context_synchronously
+          Overlay.of(context),
+          CustomSnackBar.success(
+            message: result.message!,
+          ),
+        );
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+      } else {
+        showTopSnackBar(
+          // ignore: use_build_context_synchronously
+          Overlay.of(context),
+          CustomSnackBar.error(
+            message: '${result.message}',
+          ),
+        );
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+      }
+      return response;
     } catch (e) {
-      print(e.toString());
+      showTopSnackBar(
+          // ignore: use_build_context_synchronously
+          Overlay.of(context),
+          const CustomSnackBar.error(
+            message: 'Gagal mengirim perizinan',
+          ),
+        );
+      throw Exception(e.toString());
     }
   }
 
@@ -63,49 +95,47 @@ class _AttendancePermissionState extends State<AttendancePermissionPage> {
                   const SizedBox(
                     height: 16.0,
                   ),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            InkWell(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Icon(
-                                    Icons.arrow_back_ios_new_rounded)),
-                            const SizedBox(
-                              width: 10.0,
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width / 2.04,
-                              child: const Text(
-                                'Form Perizinan',
-                                style: mainTitle,
-                                overflow: TextOverflow.clip,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          width: 12.0,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(context, '/profile-page');
-                          },
-                          child: SizedBox(
-                            height: 50,
-                            width: 50,
-                            child: Image.asset(
-                              'assets/icons/avatar_icon.png',
-                              fit: BoxFit.contain,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child:
+                                  const Icon(Icons.arrow_back_ios_new_rounded)),
+                          const SizedBox(
+                            width: 10.0,
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 2.04,
+                            child: const Text(
+                              'Form Perizinan',
+                              style: mainTitle,
+                              overflow: TextOverflow.clip,
                             ),
                           ),
+                        ],
+                      ),
+                      const SizedBox(
+                        width: 12.0,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/profile-page');
+                        },
+                        child: SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: Image.asset(
+                            'assets/icons/avatar_icon.png',
+                            fit: BoxFit.contain,
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 25.0,
@@ -135,11 +165,11 @@ class _AttendancePermissionState extends State<AttendancePermissionPage> {
                       const SizedBox(
                         height: 10.0,
                       ),
-                      DataAttendance(title: 'Nama : ', value: 'Nama'),
+                      const DataAttendance(title: 'Nama : ', value: 'Nama'),
                       const SizedBox(
                         height: 3.0,
                       ),
-                      DataAttendance(title: 'Role : ', value: 'Role'),
+                      const DataAttendance(title: 'Role : ', value: 'Role'),
                       const SizedBox(
                         height: 3.0,
                       ),
@@ -148,7 +178,7 @@ class _AttendancePermissionState extends State<AttendancePermissionPage> {
                   const SizedBox(
                     height: 27.0,
                   ),
-                  Text(
+                  const Text(
                     'Alasan Izin ?',
                     style: regularText,
                   ),
@@ -185,7 +215,7 @@ class _AttendancePermissionState extends State<AttendancePermissionPage> {
                   decoration: BoxDecorationCustom().blackButton,
                   child: Center(
                     child: Text(
-                      'Pulang',
+                      'Izin',
                       style:
                           mainTitle.copyWith(color: Colors.white, fontSize: 26),
                     ),

@@ -2,7 +2,6 @@ import 'package:attendance_mobile_app/bloc/auth/login/login_bloc.dart';
 import 'package:attendance_mobile_app/presentation/config/button_box_decoration.dart';
 import 'package:attendance_mobile_app/presentation/config/color_config.dart';
 import 'package:attendance_mobile_app/presentation/config/text_style.dart';
-import 'package:attendance_mobile_app/presentation/testing/test_profile.dart';
 import 'package:attendance_mobile_app/presentation/utils/all_text.dart';
 import 'package:attendance_mobile_app/presentation/utils/form_login.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   void isLogin() async {
     final isTokenExist = await AuthLocalStorage().isTokenExist();
     if (isTokenExist) {
+      // ignore: use_build_context_synchronously
       Navigator.pushReplacementNamed(context, '/dashboard-page');
     }
   }
@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 40.0,
                     ),
                     FormCustom(
-                      maxLine: 1,
+                        maxLine: 1,
                         hintText: TitleText().hintEmail,
                         formIcon: Icons.email,
                         keyboardType: TextInputType.emailAddress,
@@ -189,9 +189,8 @@ class _LoginPageState extends State<LoginPage> {
                           passController.clear();
                           showTopSnackBar(
                             Overlay.of(context),
-                            CustomSnackBar.success(
-                              message:
-                                  'Login Succes, Have a Nice Day ${state.loginResponseModel.token}',
+                            const CustomSnackBar.success(
+                              message: 'Login Succes, Have a Nice Day',
                             ),
                           );
 

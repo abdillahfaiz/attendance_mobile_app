@@ -18,4 +18,9 @@ class AuthLocalStorage {
     final pref = await SharedPreferences.getInstance();
     return pref.getString(tokenKey) != null;
   }
+
+   Future<bool> removeToken() async {
+    final pref = await SharedPreferences.getInstance();
+    return pref.remove(tokenKey);
+  }
 }

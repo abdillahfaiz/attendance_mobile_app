@@ -7,21 +7,10 @@ import 'package:attendance_mobile_app/presentation/utils/table_response_attendan
 import '../../config/color_config.dart';
 
 class TableResponse extends StatelessWidget {
-  String name;
-  String role;
-  String timePresence;
-  String lat;
-  String long;
-  String address;
-  TableResponse({
-    Key? key,
-    required this.name,
-    required this.role,
-    required this.timePresence,
-    required this.lat,
-    required this.long,
-    required this.address,
-  }) : super(key: key);
+  
+  const TableResponse({
+   super.key
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -49,27 +38,7 @@ class TableResponse extends StatelessWidget {
         const SizedBox(
           height: 10.0,
         ),
-        DataAttendance(title: 'Nama : ', value: name),
-        const SizedBox(
-          height: 3.0,
-        ),
-        DataAttendance(title: 'Role : ', value: role),
-        const SizedBox(
-          height: 3.0,
-        ),
-        DataAttendance(title: 'Jam Hadir : ', value: timePresence),
-        const SizedBox(
-          height: 3.0,
-        ),
-        DataAttendance(title: 'Latitude : ', value: lat),
-        const SizedBox(
-          height: 3.0,
-        ),
-        DataAttendance(title: 'Longitude : ', value: long),
-        const SizedBox(
-          height: 3.0,
-        ),
-        DataAttendance(title: 'Address : ', value: address),
+        
       ],
     );
   }

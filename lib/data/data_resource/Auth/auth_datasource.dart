@@ -13,7 +13,7 @@ class AuthDataSource {
         Uri.parse('http://absensi.zcbyr.tech/api/login'),
         body: loginModel.toMap());
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       final result = LoginResponseModel.fromJson(response.body);
       return result;
     } else {
@@ -23,7 +23,6 @@ class AuthDataSource {
 
   Future<ProfileResponseModel> getUserProfile() async {
     final token = await AuthLocalStorage().getToken();
-    print(token);
     var headers = {'Authorization': 'Bearer $token'};
     final response = await http.get(
         Uri.parse('http://absensi.zcbyr.tech/api/user-detail'),

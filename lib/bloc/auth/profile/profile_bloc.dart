@@ -1,6 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:attendance_mobile_app/bloc/auth/login/login_bloc.dart';
-import 'package:attendance_mobile_app/data/local_resource/auth_local_storage.dart';
 import 'package:bloc/bloc.dart';
 
 import 'package:attendance_mobile_app/data/data_resource/Auth/auth_datasource.dart';

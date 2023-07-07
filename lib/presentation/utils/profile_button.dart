@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-import '../config/button_box_decoration.dart';
 import '../config/text_style.dart';
 
+// ignore: must_be_immutable
 class ProfileButton extends StatelessWidget {
   BoxDecoration styleButton;
   String asset;
@@ -21,7 +21,7 @@ class ProfileButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Container(
             margin: const EdgeInsets.only(right: 28, left: 28),
-            padding: EdgeInsets.only(top: 15, bottom: 15, left: 35),
+            padding: const EdgeInsets.only(top: 15, bottom: 15, left: 35),
             width: double.infinity,
             height: 92,
             decoration: styleButton,
