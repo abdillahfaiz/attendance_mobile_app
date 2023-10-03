@@ -1,42 +1,34 @@
 import 'dart:convert';
 
 import 'package:attendance_mobile_app/data/local_resource/auth_local_storage.dart';
-import 'package:attendance_mobile_app/data/models/request/attendance/attendance_in_model.dart';
 import 'package:attendance_mobile_app/env/env.dart';
 import 'package:http/http.dart' as http;
 
 import '../../models/request/attendance/attendance_permission_model.dart';
-import '../../models/response/attendance/attendance_in_response_model.dart';
 import '../../models/response/attendance/attendance_out_response_model.dart';
-import '../../models/response/attendance/history_response_model.dart';
 
 class AttendanceDataSource {
   final String baseUrl = baseURL;
 
-  Future<AttendanceInResponseModel> attendanceIn(
-      AttendanceInModel attendanceModel) async {
-    final String token = await AuthLocalStorage().getToken();
-    var headers = {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token'
-    };
-
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/1/hadir'),
-        headers: headers,
-        body: jsonEncode({
-          'latitude': attendanceModel.latitude,
-          'longitude': attendanceModel.longitude
-        }),
-      );
-      final result = AttendanceInResponseModel.fromJson(
-          jsonDecode(response.body.toString()));
-      return result;
-    } catch (e) {
-      throw Exception(e.toString());
-    }
-  }
+  // Future<AttendanceInResponseModel> attendanceIn(
+  //     AttendanceInModel attendanceModel) async {
+  //   final String token = await AuthLocalStorage().getToken();
+  //   var headers = {
+  //     'Accept': 'application/json',
+  //     'Authorization': 'Bearer $token'
+  //   };
+  //   final response = await http.post(
+  //     Uri.parse('$baseURL/1/hadir'),
+  //     headers: headers,
+  //     body: jsonEncode({
+  //       'latitude': attendanceModel.latitude,
+  //       'longitude': attendanceModel.longitude
+  //     }),
+  //   );
+  //   final result = AttendanceInResponseModel.fromJson(
+  //       jsonDecode(response.body.toString()));
+  //   return result;
+  // }
 
   Future<AttendanceOutResponseModel> attendanceOut() async {
     final String token = await AuthLocalStorage().getToken();

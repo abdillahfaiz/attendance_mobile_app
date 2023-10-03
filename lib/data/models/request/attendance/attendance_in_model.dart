@@ -1,64 +1,60 @@
-// import 'dart:convert';
-
-// // ignore_for_file: public_member_api_docs, sort_constructors_first
-// class AttendanceInModel {
-//   final double latitude;
-//   final double longitude;
-//   final String presenceEnterTime;
-//   AttendanceInModel({
-//     required this.latitude,
-//     required this.longitude,
-//     required this.presenceEnterTime,
-//   });
-
-//   String toJson() => json.encode(toMap());
-
-//   Map<String, dynamic> toMap() {
-//     return <String, dynamic>{
-//       'latitude': latitude,
-//       'longitude': longitude,
-//       'presenceEnterTime': presenceEnterTime,
-//     };
-//   }
-
-//   factory AttendanceInModel.fromMap(Map<String, dynamic> map) {
-//     return AttendanceInModel(
-//       latitude: map['latitude'],
-//       longitude: map['longitude'],
-//       presenceEnterTime: map['presenceEnterTime'],
-//     );
-//   }
-
-//   factory AttendanceInModel.fromJson(String source) =>
-//       AttendanceInModel.fromMap(
-//           json.decode(source.toString()) as Map<String, dynamic>);
-
-//   @override
-//   String toString() =>
-//       'AttendanceInModel(latitude: $latitude, longitude: $longitude, presenceEnterTime: $presenceEnterTime)';
-// }
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+// To parse this JSON data, do
+//
+//     final inResponseModel = inResponseModelFromMap(jsonString);
 
 import 'dart:convert';
 
-class AttendanceInModel {
-  final double latitude;
-  final double longitude;
-  final String presenceEnterTime;
+class AttResponseModel {
+    bool? success;
+    String? name;
+    String? role;
+    DateTime? presenceDate;
+    double? latitude;
+    double? longitude;
+    dynamic location;
+    String? message;
 
-  AttendanceInModel({
-    required this.latitude,
-    required this.longitude,
-    required this.presenceEnterTime,
-  });
+    AttResponseModel({
+        this.success,
+        this.name,
+        this.role,
+        this.presenceDate,
+        this.latitude,
+        this.longitude,
+        this.location,
+        this.message,
+    });
 
-  factory AttendanceInModel.fromJson(Map<String, dynamic> json) {
-    return AttendanceInModel(
-        latitude: json['lattitude'],
-        longitude: json['longitude'],
-        presenceEnterTime: json['presence_enter_time']);
-  }
+    factory AttResponseModel.fromJson(String str) => AttResponseModel.fromMap(json.decode(str));
+
+    String toJson() => json.encode(toMap());
+
+    factory AttResponseModel.fromMap(Map<String, dynamic> json) => AttResponseModel(
+        success: json["success"],
+        name: json["name"],
+        role: json["role"],
+        presenceDate: json["presence_date"] == null ? null : DateTime.parse(json["presence_date"]),
+        latitude: json["latitude"]?.toDouble(),
+        longitude: json["longitude"]?.toDouble(),
+        location: json["location"],
+        message: json["message"],
+    );
+
+    Map<String, dynamic> toMap() => {
+        "success": success,
+        "name": name,
+        "role": role,
+        "presence_date": "${presenceDate!.year.toString().padLeft(4, '0')}-${presenceDate!.month.toString().padLeft(2, '0')}-${presenceDate!.day.toString().padLeft(2, '0')}",
+        "latitude": latitude,
+        "longitude": longitude,
+        "location": location,
+        "message": message,
+    };
+
 
   @override
-  String toString() =>
-      'AttendanceInModel(latitude: $latitude, longitude: $longitude, presenceEnterTime: $presenceEnterTime)';
+  String toString() {
+    return 'AttResponseModel(success: $success, name: $name, role: $role, presenceDate: $presenceDate, latitude: $latitude, longitude: $longitude, location: $location, message: $message)';
+  }
 }

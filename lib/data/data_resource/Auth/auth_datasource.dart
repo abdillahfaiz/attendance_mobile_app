@@ -23,7 +23,6 @@ class AuthDataSource {
 
   Future<ProfileResponseModel> getUserProfile() async {
     final token = await AuthLocalStorage().getToken();
-    print(token);
     var headers = {'Authorization': 'Bearer $token'};
     final response = await http.get(
         Uri.parse('https://absensi.zcbyr.tech/api/user-detail'),

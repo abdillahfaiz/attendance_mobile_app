@@ -1,17 +1,13 @@
-import 'dart:convert';
-
-import 'package:attendance_mobile_app/data/data_resource/Auth/auth_datasource.dart';
 import 'package:attendance_mobile_app/data/local_resource/auth_local_storage.dart';
 import 'package:attendance_mobile_app/presentation/utils/absen_button.dart';
 import 'package:attendance_mobile_app/presentation/config/button_box_decoration.dart';
 import 'package:attendance_mobile_app/presentation/config/text_style.dart';
+import 'package:attendance_mobile_app/presentation/utils/drawer.dart';
 import 'package:attendance_mobile_app/presentation/utils/izin_button.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../../bloc/auth/profile/profile_bloc.dart';
 import '../../data/models/response/auth/profile_response_model.dart';
 
 class DashboardScreenPage extends StatefulWidget {
@@ -22,6 +18,12 @@ class DashboardScreenPage extends StatefulWidget {
 }
 
 class _DashboardScreenPageState extends State<DashboardScreenPage> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void openDrawer(BuildContext context) {
+    scaffoldKey.currentState?.openDrawer();
+  }
+
   Future<String>? token;
 
   Future<String> getToken() async {
@@ -52,6 +54,7 @@ class _DashboardScreenPageState extends State<DashboardScreenPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffF5F8FF),
+      drawer: const DrawerCustom(),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.only(left: 24, right: 24, top: 19),
@@ -62,7 +65,18 @@ class _DashboardScreenPageState extends State<DashboardScreenPage> {
                 children: [
                   Row(
                     children: [
-                      Image.asset('assets/icons/more_icon.png'),
+                      Builder(
+                        builder: (context) => InkWell(
+                            onTap: () {
+                              Scaffold.of(context).openDrawer();
+                            },
+                            child: Image.asset('assets/icons/more_icon.png')),
+                      ),
+                      // InkWell(
+                      //     onTap: () {
+                      //       Scaffold.of(context).openDrawer();
+                      //     },
+                      //     child: Image.asset('assets/icons/more_icon.png')),
                       const SizedBox(
                         width: 12.0,
                       ),

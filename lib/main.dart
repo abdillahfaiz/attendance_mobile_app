@@ -1,13 +1,11 @@
 import 'package:attendance_mobile_app/bloc/auth/login/login_bloc.dart';
 import 'package:attendance_mobile_app/data/data_resource/Auth/auth_datasource.dart';
-
 import 'package:attendance_mobile_app/presentation/pages/att_permission_page.dart';
 import 'package:attendance_mobile_app/presentation/pages/dashboard_page_screen.dart';
 import 'package:attendance_mobile_app/presentation/pages/in_attendance.dart';
 import 'package:attendance_mobile_app/presentation/pages/login_page.dart';
 import 'package:attendance_mobile_app/presentation/pages/out_attendance.dart';
 import 'package:attendance_mobile_app/presentation/pages/profile_page.dart';
-import 'package:attendance_mobile_app/routing/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

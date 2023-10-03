@@ -1,17 +1,24 @@
+import 'dart:convert';
+
+import 'package:attendance_mobile_app/data/models/request/attendance/attendance_in_model.dart';
 import 'package:attendance_mobile_app/presentation/utils/table_response_attendance/table_att.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:intl/intl.dart';
+// ignore: depend_on_referenced_packages
 import 'package:latlong2/latlong.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../../data/local_resource/auth_local_storage.dart';
+import '../../data/models/response/auth/profile_response_model.dart';
 import '../../data/repository/location_repository.dart';
 import '../config/button_box_decoration.dart';
 import '../config/text_style.dart';
+import '../utils/table_response_attendance/table_data_absen.dart';
 
 class AttendanceInPage extends StatefulWidget {
   const AttendanceInPage({super.key});
@@ -21,30 +28,49 @@ class AttendanceInPage extends StatefulWidget {
 }
 
 class _AttendanceInPageState extends State<AttendanceInPage> {
-  late Future _getLocation = LocationRepository().getLocationPosition();
+  late final Future<Position> _getLocation =
+      LocationRepository().getLocationPosition();
+  late Future<Position> getCurrLoc = getLocationPosition();
+
+  Future<Position> getAddressLoc() async {
+    Position position = await getCurrLoc;
+    setState(() {
+      getAddressFromLongLat(position);
+    });
+    return position;
+  }
+
+  Future<ProfileResponseModel> getUserProfile() async {
+    final token = await AuthLocalStorage().getToken();
+    var header = {'Authorization': 'Bearer $token'};
+    final response = await http.get(
+        Uri.parse('http://absensi.zcbyr.tech/api/user-detail'),
+        headers: header);
+    final result = ProfileResponseModel.fromJson(response.body);
+    setState(() {
+      name = result.name;
+      position = result.position;
+    });
+    return result;
+  }
+
   double lat = 0;
   double long = 0;
   String address = '';
+  String dataLocation = '';
   String timePresence = '';
-  late Future<Position> _getCurrLoc;
-
-  // Future getCurrLoc() async {
-  //   Position position = await _getLocation;
-  //   return position;
-  // }
-
-  Future<Position> getCurrLoc() {
-    _getCurrLoc = getLocationPosition();
-    return _getCurrLoc;
-  }
+  String name = '';
+  String position = '';
 
   @override
   void initState() {
+    getAddressLoc();
+    getUserProfile();
     _getLocation;
-    _getCurrLoc;
-    getCurrLoc();
+    getCurrLoc;
     lat;
     long;
+    getLocationPosition();
     super.initState();
   }
 
@@ -108,177 +134,192 @@ class _AttendanceInPageState extends State<AttendanceInPage> {
                 height: 14.0,
               ),
               FutureBuilder(
-                future: getLocationPosition(),
+                future: _getLocation,
                 builder: (context, snapshot) {
-                  final Position data = snapshot.data!;
-                  if (snapshot.hasError) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("Error : ${snapshot.error}"),
-                      backgroundColor: Colors.redAccent,
-                    ));
-                  } else if (snapshot.data == null) {
-                    return Container();
-                  } else {
-                    List<Marker> allMarkers = [
-                      Marker(
-                        point: LatLng(
-                          data.latitude,
-                          data.longitude,
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.4,
+                        child: Image.asset(
+                          'assets/icons/loading-bar.gif',
+                          width: 200,
                         ),
-                        builder: (context) => const Icon(
-                          Icons.pin_drop,
-                          color: Colors.red,
-                          size: 24,
-                        ),
-                      ),
-                    ];
-                    return SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: Stack(
-                        children: [
-                          SizedBox(
-                            height: 428,
-                            child: Builder(
-                              builder: (context) {
-                                return SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.4,
-                                  child: FlutterMap(
-                                    options: MapOptions(
-                                      center:
-                                          LatLng(data.latitude, data.longitude),
-                                      zoom: 16,
-                                      interactiveFlags: InteractiveFlag.all -
-                                          InteractiveFlag.rotate,
-                                    ),
-                                    children: [
-                                      TileLayer(
-                                        urlTemplate:
-                                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                        userAgentPackageName:
-                                            'dev.fleaflet.flutter_map.example',
-                                      ),
-                                      MarkerLayer(
-                                        markers: allMarkers,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                          Positioned(
-                            top: MediaQuery.of(context).size.height / 2.2,
-                            width: MediaQuery.of(context).size.width,
-                            child: Container(
-                              padding: const EdgeInsets.only(
-                                  left: 33, right: 33, top: 20),
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(25),
-                                  topRight: Radius.circular(25),
-                                ),
-                                // boxShadow: [
-                                //   BoxShadow(
-                                //     color: Color(0x3F000000),
-                                //     blurRadius: 25,
-                                //     offset: Offset(3, -5),
-                                //     spreadRadius: 1,
-                                //   )
-                                // ],
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Center(
-                                    child: SizedBox(
-                                        width: 113,
-                                        child: Divider(
-                                          thickness: 5,
-                                        )),
-                                  ),
-                                  const SizedBox(
-                                    height: 19.0,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      const Text(
-                                        'Detail',
-                                        style: mainTitle,
-                                      ),
-                                      StreamBuilder(
-                                        stream: Stream.periodic(
-                                            const Duration(seconds: 1)),
-                                        builder: (context, snapshot) {
-                                          return Text(
-                                            DateFormat("HH:mm:ss")
-                                                .format(DateTime.now()),
-                                            style: mainTitle.copyWith(
-                                                fontSize: 20,
-                                                color: const Color(0xff5D5FEF)),
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 12.0,
-                                  ),
-                                  TableResponse(
-                                      name: 'Name',
-                                      role: 'Role',
-                                      timePresence: 'Time',
-                                      lat: lat.toString(),
-                                      long: long.toString(),
-                                      address: address),
-                                  const SizedBox(
-                                    height: 24.0,
-                                  ),
-                                  InkWell(
-                                    onTap: () async {
-                                      Position position = await _getLocation;
-                                      String timeAttendance =
-                                          DateFormat("HH:mm:ss")
-                                              .format(DateTime.now());
-                                      const CircularProgressIndicator();
-                                      setState(() {
-                                        lat = position.latitude;
-                                        long = position.longitude;
-                                        timePresence = timeAttendance;
-                                        getAddressFromLongLat(position);
-                                      });
-                                      attendanceIn(lat, long, address);
-                                    },
-                                    child: Container(
-                                      margin: const EdgeInsets.only(bottom: 20),
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 77,
-                                      decoration:
-                                          BoxDecorationCustom().buttonBlue,
-                                      child: Center(
-                                        child: Text(
-                                          'Hadir',
-                                          style: mainTitle.copyWith(
-                                              color: Colors.white,
-                                              fontSize: 26),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
                       ),
                     );
                   }
-                  return Container();
+                  if (snapshot.hasError) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Error : ${snapshot.error}"),
+                        backgroundColor: Colors.redAccent,
+                      ),
+                    );
+                  } else if (snapshot.data == null) {
+                    return Container();
+                  }
+                  final data = snapshot.data!;
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: Stack(
+                      children: [
+                        SizedBox(
+                          height: 428,
+                          child: Builder(
+                            builder: (context) {
+                              List<Marker> allMarkers = [
+                                Marker(
+                                  point: LatLng(data.latitude, data.longitude),
+                                  builder: (context) => const Icon(
+                                    Icons.pin_drop,
+                                    color: Colors.red,
+                                    size: 24,
+                                  ),
+                                ),
+                              ];
+                              return SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.4,
+                                child: FlutterMap(
+                                  options: MapOptions(
+                                    center:
+                                        LatLng(data.latitude, data.longitude),
+                                    zoom: 16,
+                                    interactiveFlags: InteractiveFlag.all -
+                                        InteractiveFlag.rotate,
+                                  ),
+                                  children: [
+                                    TileLayer(
+                                      urlTemplate:
+                                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                      userAgentPackageName:
+                                          'dev.fleaflet.flutter_map.example',
+                                    ),
+                                    MarkerLayer(
+                                      markers: allMarkers,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        Positioned(
+                          top: MediaQuery.of(context).size.height / 2.2,
+                          width: MediaQuery.of(context).size.width,
+                          child: Container(
+                            padding: const EdgeInsets.only(
+                                left: 33, right: 33, top: 20),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(25),
+                                topRight: Radius.circular(25),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Center(
+                                  child: SizedBox(
+                                      width: 113,
+                                      child: Divider(
+                                        thickness: 5,
+                                      )),
+                                ),
+                                const SizedBox(
+                                  height: 19.0,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'Detail',
+                                      style: mainTitle,
+                                    ),
+                                    StreamBuilder(
+                                      stream: Stream.periodic(
+                                          const Duration(seconds: 1)),
+                                      builder: (context, snapshot) {
+                                        return Text(
+                                          DateFormat("HH:mm:ss")
+                                              .format(DateTime.now()),
+                                          style: mainTitle.copyWith(
+                                              fontSize: 20,
+                                              color: const Color(0xff5D5FEF)),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 12.0,
+                                ),
+                                const TableResponse(),
+                                DataAttendance(title: 'Nama : ', value: name),
+                                const SizedBox(
+                                  height: 3.0,
+                                ),
+                                DataAttendance(
+                                    title: 'Position : ', value: position),
+                                const SizedBox(
+                                  height: 3.0,
+                                ),
+                                DataAttendance(
+                                    title: 'Latitude : ',
+                                    value: data.latitude.toString()),
+                                const SizedBox(
+                                  height: 3.0,
+                                ),
+                                DataAttendance(
+                                    title: 'Longitude : ',
+                                    value: data.longitude.toString()),
+                                const SizedBox(
+                                  height: 3.0,
+                                ),
+                                DataAttendance(
+                                    title: 'Address : ', value: dataLocation),
+                                const SizedBox(
+                                  height: 24.0,
+                                ),
+                                InkWell(
+                                  onTap: () async {
+                                    Position position = await getCurrLoc;
+                                    String timeAttendance =
+                                        DateFormat("HH:mm:ss")
+                                            .format(DateTime.now());
+                                    const CircularProgressIndicator();
+                                    setState(() {
+                                      lat = position.latitude;
+                                      long = position.longitude;
+                                      timePresence = timeAttendance;
+                                      getAddressFromLongLat(position);
+                                    });
+                                    attendanceIn(lat, long, address);
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.only(bottom: 20),
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 77,
+                                    decoration:
+                                        BoxDecorationCustom().buttonBlue,
+                                    child: Center(
+                                      child: Text(
+                                        'Hadir',
+                                        style: mainTitle.copyWith(
+                                            color: Colors.white, fontSize: 26),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  );
                 },
               ),
             ],
@@ -305,10 +346,41 @@ class _AttendanceInPageState extends State<AttendanceInPage> {
         body: {
           'latitude': lat.toString(),
           'longitude': long.toString(),
-          'address': address
+          'location': address
         },
       );
+      final data = jsonEncode(response.body);
+      AttResponseModel result = AttResponseModel.fromJson(jsonDecode(data));
+      if (result.success!) {
+        showTopSnackBar(
+          // ignore: use_build_context_synchronously
+          Overlay.of(context),
+          CustomSnackBar.success(
+            message: result.message!,
+          ),
+        );
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+      } else {
+        showTopSnackBar(
+          // ignore: use_build_context_synchronously
+          Overlay.of(context),
+          CustomSnackBar.error(
+            message: '${result.message}',
+          ),
+        );
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+      }
+      return response;
     } catch (e) {
+      showTopSnackBar(
+          // ignore: use_build_context_synchronously
+          Overlay.of(context),
+          CustomSnackBar.error(
+            message: e.toString(),
+          ),
+        );
       throw Exception('Gagal');
     }
   }
@@ -316,11 +388,12 @@ class _AttendanceInPageState extends State<AttendanceInPage> {
   Future<void> getAddressFromLongLat(Position position) async {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
-    print(placemarks);
     Placemark place = placemarks[0];
     setState(() {
       address =
-          ' ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country},';
+          '${place.thoroughfare} ${place.subLocality}, ${place.locality}, ${place.subAdministrativeArea} ${place.country},';
+      dataLocation =
+          ' ${place.thoroughfare} ${place.subLocality}, ${place.locality}, ${place.subAdministrativeArea}, ${place.country},';
     });
   }
 }

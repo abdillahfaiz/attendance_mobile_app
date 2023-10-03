@@ -1,14 +1,15 @@
+import 'dart:convert';
+
+import 'package:attendance_mobile_app/data/models/request/attendance/attendance_in_model.dart';
 import 'package:attendance_mobile_app/presentation/config/text_style.dart';
 import 'package:attendance_mobile_app/presentation/utils/profile_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../../data/local_resource/auth_local_storage.dart';
 import '../../data/models/response/auth/profile_response_model.dart';
 import '../config/button_box_decoration.dart';
-import '../utils/absen_button.dart';
 import 'package:http/http.dart' as http;
 
 class ProfilePage extends StatefulWidget {
@@ -37,6 +38,41 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  Future<AttResponseModel> doLogout() async {
+    final token = await AuthLocalStorage().getToken();
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+    try {
+      final response = await http.post(
+          Uri.parse('http://absensi.zcbyr.tech/api/logout'),
+          headers: headers);
+      final data = jsonEncode(response.body);
+      AttResponseModel result = AttResponseModel.fromJson(jsonDecode(data));
+      if (result.success!) {
+        showTopSnackBar(
+          // ignore: use_build_context_synchronously
+          Overlay.of(context),
+          CustomSnackBar.success(
+            message: result.message!,
+          ),
+        );
+      } else {
+        showTopSnackBar(
+          // ignore: use_build_context_synchronously
+          Overlay.of(context),
+          CustomSnackBar.error(
+            message: result.message!,
+          ),
+        );
+      }
+      return result;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -57,7 +93,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   top: 150,
                   right: MediaQuery.of(context).size.width / 4,
                   child: Center(
-                    child: Container(
+                    child: SizedBox(
                         height: 200,
                         width: 200,
                         child: Image.asset(
@@ -119,20 +155,38 @@ class _ProfilePageState extends State<ProfilePage> {
                         const SizedBox(
                           height: 22.0,
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(right: 28, left: 28),
-                          padding: EdgeInsets.symmetric(vertical: 14),
-                          width: double.infinity,
-                          height: 60,
-                          decoration: BoxDecorationCustom().buttonRed,
-                          child: Center(
-                              child: Text(
-                            'Logout',
-                            style: mainTitle.copyWith(
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
-                                fontSize: 24),
-                          )),
+                        InkWell(
+                          onTap: () {
+                            // showDialog(context: context, builder: (context) {
+                            //   return AlertDialog(
+                            //     title: Text('Logout'),
+                            //     content: Text('Apakah kamu ingin keluar?'),
+                            //     actions: [
+                            //       Te
+                            //     ],
+                            //   );
+                            // });
+                            setState(() {
+                              doLogout();
+                              AuthLocalStorage().removeToken();
+                            });
+                            Navigator.restorablePopAndPushNamed(context, '/');
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 28, left: 28),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            width: double.infinity,
+                            height: 60,
+                            decoration: BoxDecorationCustom().buttonRed,
+                            child: Center(
+                                child: Text(
+                              'Logout',
+                              style: mainTitle.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                  fontSize: 24),
+                            )),
+                          ),
                         ),
                       ],
                     );
