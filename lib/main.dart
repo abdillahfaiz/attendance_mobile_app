@@ -9,11 +9,16 @@ import 'package:attendance_mobile_app/presentation/pages/out_attendance.dart';
 import 'package:attendance_mobile_app/presentation/pages/profile_page.dart';
 import 'package:attendance_mobile_app/routing/routing.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/auth/profile/profile_bloc.dart';
 
 void main() {
   runApp(const MyApp());
+  //  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+  //   systemNavigationBarColor: Color(0xffFF7171), // navigation bar color
+  //   statusBarColor: Color(0xffFF7171), // status bar color
+  // ));
 }
 
 class MyApp extends StatelessWidget {

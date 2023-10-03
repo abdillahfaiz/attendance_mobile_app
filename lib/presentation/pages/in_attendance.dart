@@ -351,7 +351,6 @@ Future<Position> getLocationPosition() async {
       desiredAccuracy: LocationAccuracy.best);
 }
 
-
 // Builder(
 // builder: (context) {
 // List<Marker> allMarkers = [

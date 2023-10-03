@@ -43,8 +43,6 @@ class AttendanceOutResponseModel {
   }
 }
 
-
-
 // {
 //     "success": true,
 //     "name": "Umar",

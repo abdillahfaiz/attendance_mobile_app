@@ -61,226 +61,219 @@
 //   }
 // }
 
-
-
-
-
-
-
-
 /////////////////////////////////////////////////////////
 ///
 ///
 ///
 ///FutureBuilder<AttendanceInResponseModel>(
-                  //   future: _preserrence,
-                  //   builder: ((context, snapshot) {
-                  //     if (snapshot.hasData) {
-                  //       return Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           DataAttendance(
-                  //               title: 'Hari : ',
-                  //               value:
-                  //                   DateFormat('EEEEE').format(DateTime.now())),
-                  //           const SizedBox(
-                  //             height: 3.0,
-                  //           ),
-                  //           DataAttendance(
-                  //               title: 'Tanggal : ',
-                  //               value: DateFormat('dd-MM-yyyy')
-                  //                   .format(DateTime.now())),
-                  //           const SizedBox(
-                  //             height: 10.0,
-                  //           ),
-                  //           SizedBox(
-                  //             width: MediaQuery.of(context).size.width / 1.6,
-                  //             child: const Divider(
-                  //               color: mainColor,
-                  //             ),
-                  //           ),
-                  //           const SizedBox(
-                  //             height: 10.0,
-                  //           ),
-                  //           DataAttendance(
-                  //               title: 'Nama : ',
-                  //               value: snapshot.data!.name ?? 'null'),
-                  //           const SizedBox(
-                  //             height: 3.0,
-                  //           ),
-                  //           DataAttendance(
-                  //               title: 'Role : ',
-                  //               value: snapshot.data!.role ?? 'null'),
-                  //           const SizedBox(
-                  //             height: 3.0,
-                  //           ),
-                  //           DataAttendance(
-                  //               title: 'Jam Hadir : ', value: timePresence),
-                  //           const SizedBox(
-                  //             height: 3.0,
-                  //           ),
-                  //           DataAttendance(
-                  //               title: 'Latitude : ', value: lat.toString()),
-                  //           const SizedBox(
-                  //             height: 3.0,
-                  //           ),
-                  //           DataAttendance(
-                  //               title: 'Longitude : ', value: long.toString()),
-                  //         ],
-                  //       );
-                  //     }
-                  //     return Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.start,
-                  //       children: [
-                  //         DataAttendance(
-                  //             title: 'Hari : ',
-                  //             value:
-                  //                 DateFormat('EEEEE').format(DateTime.now())),
-                  //         const SizedBox(
-                  //           height: 3.0,
-                  //         ),
-                  //         DataAttendance(
-                  //             title: 'Tanggal : ',
-                  //             value: DateFormat('dd-MM-yyyy')
-                  //                 .format(DateTime.now())),
-                  //         const SizedBox(
-                  //           height: 10.0,
-                  //         ),
-                  //         SizedBox(
-                  //           width: MediaQuery.of(context).size.width / 1.6,
-                  //           child: const Divider(
-                  //             color: mainColor,
-                  //           ),
-                  //         ),
-                  //         const SizedBox(
-                  //           height: 10.0,
-                  //         ),
-                  //         const DataAttendance(title: 'Nama : ', value: ''),
-                  //         const SizedBox(
-                  //           height: 3.0,
-                  //         ),
-                  //         const DataAttendance(title: 'Role : ', value: ''),
-                  //         const SizedBox(
-                  //           height: 3.0,
-                  //         ),
-                  //         DataAttendance(
-                  //             title: 'Jam Hadir : ', value: timePresence),
-                  //         const SizedBox(
-                  //           height: 3.0,
-                  //         ),
-                  //         DataAttendance(
-                  //             title: 'Latitude : ', value: lat.toString()),
-                  //         const SizedBox(
-                  //           height: 3.0,
-                  //         ),
-                  //         DataAttendance(
-                  //             title: 'Longitude : ', value: long.toString()),
-                  //       ],
-                  //     );
-                  //   }),
+//   future: _preserrence,
+//   builder: ((context, snapshot) {
+//     if (snapshot.hasData) {
+//       return Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           DataAttendance(
+//               title: 'Hari : ',
+//               value:
+//                   DateFormat('EEEEE').format(DateTime.now())),
+//           const SizedBox(
+//             height: 3.0,
+//           ),
+//           DataAttendance(
+//               title: 'Tanggal : ',
+//               value: DateFormat('dd-MM-yyyy')
+//                   .format(DateTime.now())),
+//           const SizedBox(
+//             height: 10.0,
+//           ),
+//           SizedBox(
+//             width: MediaQuery.of(context).size.width / 1.6,
+//             child: const Divider(
+//               color: mainColor,
+//             ),
+//           ),
+//           const SizedBox(
+//             height: 10.0,
+//           ),
+//           DataAttendance(
+//               title: 'Nama : ',
+//               value: snapshot.data!.name ?? 'null'),
+//           const SizedBox(
+//             height: 3.0,
+//           ),
+//           DataAttendance(
+//               title: 'Role : ',
+//               value: snapshot.data!.role ?? 'null'),
+//           const SizedBox(
+//             height: 3.0,
+//           ),
+//           DataAttendance(
+//               title: 'Jam Hadir : ', value: timePresence),
+//           const SizedBox(
+//             height: 3.0,
+//           ),
+//           DataAttendance(
+//               title: 'Latitude : ', value: lat.toString()),
+//           const SizedBox(
+//             height: 3.0,
+//           ),
+//           DataAttendance(
+//               title: 'Longitude : ', value: long.toString()),
+//         ],
+//       );
+//     }
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         DataAttendance(
+//             title: 'Hari : ',
+//             value:
+//                 DateFormat('EEEEE').format(DateTime.now())),
+//         const SizedBox(
+//           height: 3.0,
+//         ),
+//         DataAttendance(
+//             title: 'Tanggal : ',
+//             value: DateFormat('dd-MM-yyyy')
+//                 .format(DateTime.now())),
+//         const SizedBox(
+//           height: 10.0,
+//         ),
+//         SizedBox(
+//           width: MediaQuery.of(context).size.width / 1.6,
+//           child: const Divider(
+//             color: mainColor,
+//           ),
+//         ),
+//         const SizedBox(
+//           height: 10.0,
+//         ),
+//         const DataAttendance(title: 'Nama : ', value: ''),
+//         const SizedBox(
+//           height: 3.0,
+//         ),
+//         const DataAttendance(title: 'Role : ', value: ''),
+//         const SizedBox(
+//           height: 3.0,
+//         ),
+//         DataAttendance(
+//             title: 'Jam Hadir : ', value: timePresence),
+//         const SizedBox(
+//           height: 3.0,
+//         ),
+//         DataAttendance(
+//             title: 'Latitude : ', value: lat.toString()),
+//         const SizedBox(
+//           height: 3.0,
+//         ),
+//         DataAttendance(
+//             title: 'Longitude : ', value: long.toString()),
+//       ],
+//     );
+//   }),
 
-                    // BlocBuilder<AttendanceInBloc, AttendanceInState>(
-                    //     builder: ((context, state) {
-                    //   if (state is AttendanceInLoaded) {
-                    //     print(state.attendanceInResponseModel.latitude);
-                    //     Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         DataAttendance(
-                    //             title: 'Hari : ',
-                    //             value:
-                    //                 DateFormat('EEEEE').format(DateTime.now())),
-                    //         const SizedBox(
-                    //           height: 3.0,
-                    //         ),
-                    //         DataAttendance(
-                    //             title: 'Tanggal : ',
-                    //             value: DateFormat('dd-MM-yyyy')
-                    //                 .format(DateTime.now())),
-                    //         const SizedBox(
-                    //           height: 10.0,
-                    //         ),
-                    //         SizedBox(
-                    //           width: MediaQuery.of(context).size.width / 1.6,
-                    //           child: const Divider(
-                    //             color: mainColor,
-                    //           ),
-                    //         ),
-                    //         const SizedBox(
-                    //           height: 10.0,
-                    //         ),
-                    //         DataAttendance(
-                    //             title: 'Nama : ',
-                    //             value:
-                    //                 state.attendanceInResponseModel.name ?? ''),
-                    //         const SizedBox(
-                    //           height: 3.0,
-                    //         ),
-                    //         DataAttendance(
-                    //             title: 'Role : ',
-                    //             value:
-                    //                 state.attendanceInResponseModel.role ?? ''),
-                    //         const SizedBox(
-                    //           height: 3.0,
-                    //         ),
-                    //         DataAttendance(
-                    //             title: 'Jam Hadir : ', value: timePresence),
-                    //         const SizedBox(
-                    //           height: 3.0,
-                    //         ),
-                    //         DataAttendance(
-                    //             title: 'Latitude : ', value: lat.toString()),
-                    //         const SizedBox(
-                    //           height: 3.0,
-                    //         ),
-                    //         DataAttendance(
-                    //             title: 'Longitude : ', value: long.toString()),
-                    //       ],
-                    //     );
-                    //   }
-                    //   return Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: [
-                    //       DataAttendance(
-                    //           title: 'Hari : ',
-                    //           value: DateFormat('EEEEE').format(DateTime.now())),
-                    //       const SizedBox(
-                    //         height: 3.0,
-                    //       ),
-                    //       DataAttendance(
-                    //           title: 'Tanggal : ',
-                    //           value: DateFormat('dd-MM-yyyy')
-                    //               .format(DateTime.now())),
-                    //       const SizedBox(
-                    //         height: 10.0,
-                    //       ),
-                    //       SizedBox(
-                    //         width: MediaQuery.of(context).size.width / 1.6,
-                    //         child: const Divider(
-                    //           color: mainColor,
-                    //         ),
-                    //       ),
-                    //       const SizedBox(
-                    //         height: 10.0,
-                    //       ),
-                    //       const DataAttendance(title: 'Nama : ', value: ''),
-                    //       const SizedBox(
-                    //         height: 3.0,
-                    //       ),
-                    //       const DataAttendance(title: 'Role : ', value: ''),
-                    //       const SizedBox(
-                    //         height: 3.0,
-                    //       ),
-                    //       const DataAttendance(title: 'Jam Hadir : ', value: ''),
-                    //       const SizedBox(
-                    //         height: 3.0,
-                    //       ),
-                    //       const DataAttendance(title: 'Latitude : ', value: ''),
-                    //       const SizedBox(
-                    //         height: 3.0,
-                    //       ),
-                    //       const DataAttendance(title: 'Longitude : ', value: ''),
-                    //     ],
-                    //   );
-                    // })),
-                  // )
+// BlocBuilder<AttendanceInBloc, AttendanceInState>(
+//     builder: ((context, state) {
+//   if (state is AttendanceInLoaded) {
+//     print(state.attendanceInResponseModel.latitude);
+//     Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         DataAttendance(
+//             title: 'Hari : ',
+//             value:
+//                 DateFormat('EEEEE').format(DateTime.now())),
+//         const SizedBox(
+//           height: 3.0,
+//         ),
+//         DataAttendance(
+//             title: 'Tanggal : ',
+//             value: DateFormat('dd-MM-yyyy')
+//                 .format(DateTime.now())),
+//         const SizedBox(
+//           height: 10.0,
+//         ),
+//         SizedBox(
+//           width: MediaQuery.of(context).size.width / 1.6,
+//           child: const Divider(
+//             color: mainColor,
+//           ),
+//         ),
+//         const SizedBox(
+//           height: 10.0,
+//         ),
+//         DataAttendance(
+//             title: 'Nama : ',
+//             value:
+//                 state.attendanceInResponseModel.name ?? ''),
+//         const SizedBox(
+//           height: 3.0,
+//         ),
+//         DataAttendance(
+//             title: 'Role : ',
+//             value:
+//                 state.attendanceInResponseModel.role ?? ''),
+//         const SizedBox(
+//           height: 3.0,
+//         ),
+//         DataAttendance(
+//             title: 'Jam Hadir : ', value: timePresence),
+//         const SizedBox(
+//           height: 3.0,
+//         ),
+//         DataAttendance(
+//             title: 'Latitude : ', value: lat.toString()),
+//         const SizedBox(
+//           height: 3.0,
+//         ),
+//         DataAttendance(
+//             title: 'Longitude : ', value: long.toString()),
+//       ],
+//     );
+//   }
+//   return Column(
+//     crossAxisAlignment: CrossAxisAlignment.start,
+//     children: [
+//       DataAttendance(
+//           title: 'Hari : ',
+//           value: DateFormat('EEEEE').format(DateTime.now())),
+//       const SizedBox(
+//         height: 3.0,
+//       ),
+//       DataAttendance(
+//           title: 'Tanggal : ',
+//           value: DateFormat('dd-MM-yyyy')
+//               .format(DateTime.now())),
+//       const SizedBox(
+//         height: 10.0,
+//       ),
+//       SizedBox(
+//         width: MediaQuery.of(context).size.width / 1.6,
+//         child: const Divider(
+//           color: mainColor,
+//         ),
+//       ),
+//       const SizedBox(
+//         height: 10.0,
+//       ),
+//       const DataAttendance(title: 'Nama : ', value: ''),
+//       const SizedBox(
+//         height: 3.0,
+//       ),
+//       const DataAttendance(title: 'Role : ', value: ''),
+//       const SizedBox(
+//         height: 3.0,
+//       ),
+//       const DataAttendance(title: 'Jam Hadir : ', value: ''),
+//       const SizedBox(
+//         height: 3.0,
+//       ),
+//       const DataAttendance(title: 'Latitude : ', value: ''),
+//       const SizedBox(
+//         height: 3.0,
+//       ),
+//       const DataAttendance(title: 'Longitude : ', value: ''),
+//     ],
+//   );
+// })),
+// )

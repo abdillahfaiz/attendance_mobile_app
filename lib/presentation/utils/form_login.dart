@@ -10,7 +10,7 @@ class FormCustom extends StatelessWidget {
   final bool obscureText;
   final TextEditingController textEditincontroller;
   int maxLine;
-   FormCustom({
+  FormCustom({
     Key? key,
     required this.hintText,
     required this.formIcon,
@@ -30,7 +30,7 @@ class FormCustom extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(width: 1, color: mainColor),
       ),
-      child:  TextField(
+      child: TextField(
         maxLines: maxLine,
         decoration: InputDecoration(
           icon: Icon(

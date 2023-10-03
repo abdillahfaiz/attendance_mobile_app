@@ -5,7 +5,8 @@ abstract class ProfileState {}
 
 class ProfileInitial extends ProfileState {}
 
-class ProfileLoading extends ProfileState{}
+class ProfileLoading extends ProfileState {}
+
 class ProfileLoaded extends ProfileState {
   ProfileResponseModel profileResponseModel;
   ProfileLoaded({
@@ -18,5 +19,4 @@ class ProfileError extends ProfileState {
   ProfileError({
     required this.message,
   });
-
 }

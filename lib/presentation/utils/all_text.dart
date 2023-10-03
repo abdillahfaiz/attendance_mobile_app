@@ -1,4 +1,4 @@
-class TitleText{
+class TitleText {
   String login = 'LOGIN';
   String hintEmail = 'Email Address';
   String hintPass = 'Password';

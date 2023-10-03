@@ -8,7 +8,7 @@ class PermissionModel {
     required this.title,
     required this.desc,
   });
-  
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'title': title,
@@ -25,5 +25,6 @@ class PermissionModel {
 
   String toJson() => json.encode(toMap());
 
-  factory PermissionModel.fromJson(String source) => PermissionModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory PermissionModel.fromJson(String source) =>
+      PermissionModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

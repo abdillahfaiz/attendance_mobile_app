@@ -18,5 +18,3 @@ const TextStyle regularText = TextStyle(
     fontSize: 12,
     fontFamily: 'Montserrat',
     fontWeight: FontWeight.w500);
-
-

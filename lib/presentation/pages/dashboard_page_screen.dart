@@ -35,7 +35,7 @@ class _DashboardScreenPageState extends State<DashboardScreenPage> {
     final token = await AuthLocalStorage().getToken();
     var header = {'Authorization': 'Bearer $token'};
     final response = await http.get(
-        Uri.parse('http://absensi.zcbyr.tech/api/user-detail'),
+        Uri.parse('https://absensi.zcbyr.tech/api/user-detail'),
         headers: header);
     final result = ProfileResponseModel.fromJson(response.body);
     return result;

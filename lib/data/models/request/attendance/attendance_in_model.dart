@@ -59,6 +59,6 @@ class AttendanceInModel {
   }
 
   @override
-  String toString() => 'AttendanceInModel(latitude: $latitude, longitude: $longitude, presenceEnterTime: $presenceEnterTime)';
-
+  String toString() =>
+      'AttendanceInModel(latitude: $latitude, longitude: $longitude, presenceEnterTime: $presenceEnterTime)';
 }

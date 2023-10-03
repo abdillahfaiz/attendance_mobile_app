@@ -78,7 +78,8 @@ class _LoginTestingState extends State<LoginTesting> {
                   showTopSnackBar(
                     Overlay.of(context),
                     CustomSnackBar.success(
-                      message: 'Succes Login. Have a nice day ${state.loginResponseModel.token}',
+                      message:
+                          'Succes Login. Have a nice day ${state.loginResponseModel.token}',
                     ),
                   );
 

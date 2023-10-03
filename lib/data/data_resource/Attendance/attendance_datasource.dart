@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:attendance_mobile_app/data/local_resource/auth_local_storage.dart';
 import 'package:attendance_mobile_app/data/models/request/attendance/attendance_in_model.dart';
+import 'package:attendance_mobile_app/env/env.dart';
 import 'package:http/http.dart' as http;
 
 import '../../models/request/attendance/attendance_permission_model.dart';
@@ -10,7 +11,7 @@ import '../../models/response/attendance/attendance_out_response_model.dart';
 import '../../models/response/attendance/history_response_model.dart';
 
 class AttendanceDataSource {
-  final String baseURL = 'http://absensi.zcbyr.tech/api/absensi';
+  final String baseUrl = baseURL;
 
   Future<AttendanceInResponseModel> attendanceIn(
       AttendanceInModel attendanceModel) async {
@@ -19,17 +20,22 @@ class AttendanceDataSource {
       'Accept': 'application/json',
       'Authorization': 'Bearer $token'
     };
-    final response = await http.post(
-      Uri.parse('$baseURL/1/hadir'),
-      headers: headers,
-      body: jsonEncode({
-        'latitude': attendanceModel.latitude,
-        'longitude': attendanceModel.longitude
-      }),
-    );
-    final result = AttendanceInResponseModel.fromJson(
-        jsonDecode(response.body.toString()));
-    return result;
+
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/1/hadir'),
+        headers: headers,
+        body: jsonEncode({
+          'latitude': attendanceModel.latitude,
+          'longitude': attendanceModel.longitude
+        }),
+      );
+      final result = AttendanceInResponseModel.fromJson(
+          jsonDecode(response.body.toString()));
+      return result;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
   }
 
   Future<AttendanceOutResponseModel> attendanceOut() async {
@@ -38,15 +44,15 @@ class AttendanceDataSource {
       'Accept': 'application/json',
       'Authorization': 'Bearer $token'
     };
-    final response =
-        await http.post(Uri.parse('$baseURL/1/pulang'), headers: headers);
+    try {
+      final response =
+          await http.post(Uri.parse('$baseUrl/1/pulang'), headers: headers);
 
-    if (response.statusCode == 201) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
       final result =
           AttendanceOutResponseModel.fromJson(responseData.toString());
       return result;
-    } else {
+    } catch (e) {
       throw Exception('Failed to perform attendance out');
     }
   }
@@ -59,16 +65,16 @@ class AttendanceDataSource {
       'Content-Type': 'application/x-www-form-urlencoded',
       'Authorization': 'Bearer $token'
     };
-    final response = await http.post(
-      Uri.parse('$baseURL/1/minta-izin'),
-      headers: headers,
-      body: permissionModel.toMap(),
-    );
-    // if (response.statusCode == 201) {
-    return PermissionModel.fromJson(jsonDecode(response.body));
-    // } else {
-    //   throw Exception('Gagal Mengirim Izin');
-    // }
+    try {
+      final response = await http.post(
+        Uri.parse('$baseURL/1/minta-izin'),
+        headers: headers,
+        body: permissionModel.toMap(),
+      );
+      return PermissionModel.fromJson(jsonDecode(response.body));
+    } catch (e) {
+      throw Exception('Gagal Mengirim Izin');
+    }
   }
 
   // Future<List<HistoryResponseModel>> getHistory() async {
